@@ -193,6 +193,22 @@
                     <mainClass>fastjson.Benchmark</mainClass>
                 </configuration>
             </plugin>
+            
+            <!-- Maven Test Plugin for Benchmark class -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.1.2</version>
+                <configuration>
+                    <includes>
+                        <include>**/*Test.java</include>
+                        <include>**/*Benchmark.java</include>
+                    </includes>
+                    <excludes>
+                        <exclude>**/Benchmark.java</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
 
             <!-- Native Library Resource Plugin -->
             <plugin>
