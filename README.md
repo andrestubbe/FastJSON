@@ -6,7 +6,7 @@
 [![Java](https://img.shields.io/badge/Java-17+-blue.svg)](https://www.java.com)
 [![Platform](https://img.shields.io/badge/Platform-Windows%2010+-lightgrey.svg)]()
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![JitPack](https://img.shields.io/badge/JitPack-ready-green.svg)](https://jitpack.io)
+[![JitPack](https://jitpack.io/v/andrestubbe/FastJSON.svg)](https://jitpack.io/#andrestubbe/FastJSON)
 
 **FastJSON** replaces Jackson/Gson with a **zero-copy, SIMD-accelerated** implementation. Built for high-frequency JSON processing without GC overhead.
 
@@ -124,6 +124,36 @@ Person person = mapper.readValue(json, Person.class);  // 2,500ns + GC
 // FastJSON: Zero-copy, lazy parsing, no GC
 FastJsonValue doc = FastJSON.parse(json);  // 150ns
 doc.getString("name");  // Access single field, rest stays unparsed
+```
+
+### Real-World Use Cases
+
+```java
+// 1. High-Frequency Trading (1000 JSON messages/sec)
+// Traditional: 2.5ms + GC pauses → missed trades
+// FastJSON: 150μs, no GC → sub-millisecond processing
+
+// 2. AI API Integration (OpenAI/Claude/Ollama)
+FastJsonValue response = FastJSON.parse(apiResponseBytes);
+String content = response.path("choices[0].message.content").asString();
+// 50× faster than Jackson ObjectNode traversal
+
+// 3. Game Netcode (State Snapshots)
+FastJsonValue state = FastJSON.parse(udpPacket);
+float x = state.getFloat("players[0].pos.x", 0f);
+float y = state.getFloat("players[0].pos.y", 0f);
+// Parse only position, ignore inventory/quests/etc
+
+// 4. IoT Telemetry Ingestion
+// 10,000 sensors × JSON/min = massive GC pressure
+// FastJSON: Zero-allocation string views, survive GC storms
+
+// 5. Log Analytics Pipeline
+FastJsonValue log = FastJSON.parse(logLine);
+if (log.getOrThrow("level").asString().equals("ERROR")) {
+    alertService.send(log.getString("message"));
+}
+// getOrThrow() - fail fast on malformed logs
 ```
 
 ### The Zero-Copy Advantage

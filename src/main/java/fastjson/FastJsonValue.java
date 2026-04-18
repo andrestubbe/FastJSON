@@ -141,6 +141,84 @@ public class FastJsonValue implements AutoCloseable {
     }
     
     /**
+     * Get field or throw exception if missing.
+     * Fail-fast for required fields.
+     * 
+     * @param name field name
+     * @return FastJsonValue for field
+     * @throws FastJsonParseException if field not found or null
+     */
+    public FastJsonValue getOrThrow(String name) {
+        FastJsonValue field = get(name);
+        if (field == null || field.isNull()) {
+            throw new FastJsonParseException("Required field '" + name + "' is missing or null");
+        }
+        return field;
+    }
+    
+    /**
+     * Navigate nested path (e.g., "choices[0].message.content").
+     * Supports dot notation and array indices.
+     * 
+     * @param path path expression
+     * @return FastJsonValue at path, or null if not found
+     */
+    public FastJsonValue path(String path) {
+        String[] parts = path.split("\\.");
+        FastJsonValue current = this;
+        
+        for (String part : parts) {
+            if (current == null || current.isNull()) {
+                return null;
+            }
+            
+            // Check for array index [n]
+            int bracketIdx = part.indexOf('[');
+            if (bracketIdx >= 0) {
+                // Field name before bracket
+                if (bracketIdx > 0) {
+                    String fieldName = part.substring(0, bracketIdx);
+                    current = current.get(fieldName);
+                    if (current == null) return null;
+                }
+                
+                // Extract all indices
+                String remaining = part.substring(bracketIdx);
+                while (remaining.startsWith("[")) {
+                    int closeIdx = remaining.indexOf(']');
+                    if (closeIdx < 0) return null;
+                    
+                    int index = Integer.parseInt(remaining.substring(1, closeIdx));
+                    if (!current.isArray()) return null;
+                    
+                    current = current.get(index);
+                    if (current == null) return null;
+                    
+                    remaining = remaining.substring(closeIdx + 1);
+                }
+            } else {
+                // Simple field access
+                if (!current.isObject()) return null;
+                current = current.get(part);
+            }
+        }
+        
+        return current;
+    }
+    
+    /**
+     * Navigate path with default value.
+     * 
+     * @param path path expression
+     * @param defaultValue default if path not found
+     * @return FastJsonValue at path, or defaultValue
+     */
+    public FastJsonValue path(String path, FastJsonValue defaultValue) {
+        FastJsonValue result = path(path);
+        return result != null ? result : defaultValue;
+    }
+    
+    /**
      * Get element from array by index.
      * 
      * @param index element index
@@ -226,6 +304,28 @@ public class FastJsonValue implements AutoCloseable {
     public double getDouble(String name, double defaultValue) {
         FastJsonValue field = get(name);
         return field != null && !field.isNull() ? field.asDouble() : defaultValue;
+    }
+    
+    /**
+     * Get field as float.
+     * 
+     * @param name field name
+     * @return float value
+     */
+    public float getFloat(String name) {
+        return (float) getDouble(name);
+    }
+    
+    /**
+     * Get field as float with default.
+     * 
+     * @param name field name
+     * @param defaultValue default if field missing or null
+     * @return float value
+     */
+    public float getFloat(String name, float defaultValue) {
+        FastJsonValue field = get(name);
+        return field != null && !field.isNull() ? (float) field.asDouble() : defaultValue;
     }
     
     /**
