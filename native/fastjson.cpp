@@ -328,12 +328,21 @@ JNIEXPORT jlong JNICALL Java_fastjson_FastJSON_nativeGetField(
     jbyte* nameBytes = env->GetByteArrayElements(fieldName, nullptr);
     if (!nameBytes) return 0;
     
-    // Search for field
+    // Search for field by comparing key strings
     jlong result = 0;
     for (size_t i = 0; i < value->data.object.count; i++) {
-        // Compare field names
-        // This is simplified - real implementation needs proper field storage
-        // TODO: Implement field lookup
+        Field& field = value->data.object.fields[i];
+        
+        // Compare lengths first
+        if (field.keyLength != static_cast<size_t>(nameLen)) {
+            continue;
+        }
+        
+        // Compare content
+        if (std::memcmp(field.keyData, nameBytes, nameLen) == 0) {
+            result = reinterpret_cast<jlong>(field.value);
+            break;
+        }
     }
     
     env->ReleaseByteArrayElements(fieldName, nameBytes, JNI_ABORT);
@@ -543,6 +552,13 @@ ValueHandle* createValue(int type) {
     return value;
 }
 
+// Object field structure
+struct Field {
+    const uint8_t* keyData;      // Key string in source buffer
+    size_t keyLength;            // Key length
+    ValueHandle* value;        // Value handle
+};
+
 void freeValue(ValueHandle* value) {
     if (!value) return;
     
@@ -555,7 +571,12 @@ void freeValue(ValueHandle* value) {
             break;
             
         case FJ_TYPE_OBJECT:
-            // TODO: Free fields
+            if (value->data.object.fields) {
+                for (size_t i = 0; i < value->data.object.count; i++) {
+                    freeValue(value->data.object.fields[i].value);
+                }
+                delete[] value->data.object.fields;
+            }
             break;
     }
     
@@ -619,33 +640,93 @@ ValueHandle* parseObject(ParserState& state) {
     obj->data.object.fields = nullptr;
     obj->data.object.count = 0;
     
+    // Temp storage for fields (resize as needed)
+    size_t capacity = 8;
+    Field* fields = new Field[capacity];
+    size_t count = 0;
+    
     skipWhitespace(state);
     
     // Empty object
     if (state.pos < state.length && state.data[state.pos] == '}') {
         state.pos++;
+        obj->data.object.fields = fields;
+        obj->data.object.count = count;
         return obj;
     }
     
-    // TODO: Implement full object parsing with field storage
-    // For now, placeholder implementation
-    
-    // Skip to end of object
-    int depth = 1;
-    while (state.pos < state.length && depth > 0) {
-        if (state.data[state.pos] == '{') depth++;
-        else if (state.data[state.pos] == '}') depth--;
-        else if (state.data[state.pos] == '"') {
-            // Skip string
-            state.pos++;
-            while (state.pos < state.length && state.data[state.pos] != '"') {
-                if (state.data[state.pos] == '\\') state.pos++;
-                state.pos++;
-            }
+    // Parse key-value pairs
+    while (state.pos < state.length) {
+        skipWhitespace(state);
+        
+        // Expect string key
+        if (state.pos >= state.length || state.data[state.pos] != '"') {
+            // Error: expected string key
+            break;
         }
-        state.pos++;
+        
+        // Parse key string
+        state.pos++; // Skip opening quote
+        const uint8_t* keyStart = state.data + state.pos;
+        int keyLen = findStringEndScalar(state.data + state.pos, state.length - state.pos);
+        if (keyLen < 0) {
+            // Error: unterminated string
+            break;
+        }
+        state.pos += keyLen + 1; // Skip key + closing quote
+        
+        skipWhitespace(state);
+        
+        // Expect colon
+        if (state.pos >= state.length || state.data[state.pos] != ':') {
+            // Error: expected colon
+            break;
+        }
+        state.pos++; // Skip colon
+        state.column++;
+        
+        // Parse value
+        ValueHandle* value = parseValue(state);
+        if (!value) {
+            // Error: invalid value
+            break;
+        }
+        
+        // Store field
+        if (count >= capacity) {
+            capacity *= 2;
+            Field* newFields = new Field[capacity];
+            for (size_t i = 0; i < count; i++) {
+                newFields[i] = fields[i];
+            }
+            delete[] fields;
+            fields = newFields;
+        }
+        fields[count].keyData = keyStart;
+        fields[count].keyLength = keyLen;
+        fields[count].value = value;
+        count++;
+        
+        skipWhitespace(state);
+        
+        // Check for end of object or more fields
+        if (state.pos < state.length && state.data[state.pos] == '}') {
+            state.pos++; // Skip closing brace
+            break;
+        }
+        
+        if (state.pos < state.length && state.data[state.pos] == ',') {
+            state.pos++; // Skip comma
+            state.column++;
+            continue;
+        }
+        
+        // Error: expected , or }
+        break;
     }
     
+    obj->data.object.fields = fields;
+    obj->data.object.count = count;
     return obj;
 }
 
@@ -656,32 +737,65 @@ ValueHandle* parseArray(ParserState& state) {
     arr->data.array.elements = nullptr;
     arr->data.array.count = 0;
     
+    // Temp storage for elements (resize as needed)
+    size_t capacity = 8;
+    ValueHandle** elements = new ValueHandle*[capacity];
+    size_t count = 0;
+    
     skipWhitespace(state);
     
     // Empty array
     if (state.pos < state.length && state.data[state.pos] == ']') {
         state.pos++;
+        arr->data.array.elements = elements;
+        arr->data.array.count = count;
         return arr;
     }
     
-    // TODO: Implement full array parsing
-    // For now, placeholder
-    
-    // Skip to end of array
-    int depth = 1;
-    while (state.pos < state.length && depth > 0) {
-        if (state.data[state.pos] == '[') depth++;
-        else if (state.data[state.pos] == ']') depth--;
-        else if (state.data[state.pos] == '"') {
-            state.pos++;
-            while (state.pos < state.length && state.data[state.pos] != '"') {
-                if (state.data[state.pos] == '\\') state.pos++;
-                state.pos++;
-            }
+    // Parse elements
+    while (state.pos < state.length) {
+        skipWhitespace(state);
+        
+        // Parse value
+        ValueHandle* value = parseValue(state);
+        if (!value) {
+            // Error: invalid value
+            break;
         }
-        state.pos++;
+        
+        // Store element
+        if (count >= capacity) {
+            capacity *= 2;
+            ValueHandle** newElements = new ValueHandle*[capacity];
+            for (size_t i = 0; i < count; i++) {
+                newElements[i] = elements[i];
+            }
+            delete[] elements;
+            elements = newElements;
+        }
+        elements[count] = value;
+        count++;
+        
+        skipWhitespace(state);
+        
+        // Check for end of array or more elements
+        if (state.pos < state.length && state.data[state.pos] == ']') {
+            state.pos++; // Skip closing bracket
+            break;
+        }
+        
+        if (state.pos < state.length && state.data[state.pos] == ',') {
+            state.pos++; // Skip comma
+            state.column++;
+            continue;
+        }
+        
+        // Error: expected , or ]
+        break;
     }
     
+    arr->data.array.elements = elements;
+    arr->data.array.count = count;
     return arr;
 }
 
