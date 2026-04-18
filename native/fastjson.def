@@ -1,0 +1,19 @@
+LIBRARY fastjson
+EXPORTS
+    Java_fastjson_FastJSON_nativeParse
+    Java_fastjson_FastJSON_nativeParseBuffer
+    Java_fastjson_FastJSON_nativeFree
+    Java_fastjson_FastJSON_nativeGetType
+    Java_fastjson_FastJSON_nativeGetField
+    Java_fastjson_FastJSON_nativeGetElement
+    Java_fastjson_FastJSON_nativeGetInt
+    Java_fastjson_FastJSON_nativeGetLong
+    Java_fastjson_FastJSON_nativeGetDouble
+    Java_fastjson_FastJSON_nativeGetBoolean
+    Java_fastjson_FastJSON_nativeGetStringBytes
+    Java_fastjson_FastJSON_nativeGetArraySize
+    Java_fastjson_FastJSON_nativeGetObjectSize
+    Java_fastjson_FastJSON_nativeSerialize
+    Java_fastjson_FastJSON_nativeFindToken
+    Java_fastjson_FastJSON_nativeFindStringEnd
+    Java_fastjson_FastJSON_nativeSkipWhitespace
