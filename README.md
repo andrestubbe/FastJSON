@@ -1,4 +1,4 @@
-# FastJSON v1.0 — Zero-Copy JSON Parser for Java
+# FastJSON — Zero-copy JSON parser for Java
 
 > ⚡ **50× faster** than Jackson/Gson | **Zero-copy parsing** | **SIMD-accelerated**
 
