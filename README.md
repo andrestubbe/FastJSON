@@ -399,25 +399,9 @@ doc.close();  // Free native resources
 
 ---
 
-## 🛠️ Building from Source
+## Build from Source
 
-See [COMPILE.md](COMPILE.md) for detailed instructions.
-
-Quick start:
-
-```bash
-# Compile native library (Windows + MSVC)
-compile.bat
-
-# Build JAR
-mvn clean package
-
-# Run tests
-mvn test
-
-# Run benchmarks
-mvn exec:java
-```
+See [COMPILE.md](COMPILE.md) for detailed build instructions.
 
 ---
 
