@@ -1,4 +1,4 @@
-# FastJSON v0.1.0 — Ultra-Fast Native JSON Parser for Java
+# FastJSON — Ultra-Fast Native JSON Parser for Java v0.1.0
 
 **A high-performance native JSON module for the FastJava ecosystem. Optimized for raw throughput and zero-copy parsing via SIMD.**
 
