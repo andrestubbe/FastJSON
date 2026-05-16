@@ -20,25 +20,37 @@ echo %GREEN%  FastJSON Native Build%RESET%
 echo %GREEN%========================================%RESET%
 echo.
 
-REM Check for Visual Studio
-where cl >nul 2>nul
-if %ERRORLEVEL% neq 0 (
-    echo %RED%Error: MSVC compiler not found%RESET%
-    echo %YELLOW%Please run this script from a Visual Studio Developer Command Prompt%RESET%
+REM Find Visual Studio
+set "VSWHERE=%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe"
+if not exist "%VSWHERE%" (
+    echo %RED%Error: vswhere.exe not found. Install Visual Studio 2019+.%RESET%
+    exit /b 1
+)
+
+for /f "usebackq tokens=*" %%i in (`"%VSWHERE%" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do (
+    set "VS_PATH=%%i"
+)
+
+if not defined VS_PATH (
+    echo %RED%Error: Visual Studio with C++ tools not found.%RESET%
+    exit /b 1
+)
+
+echo %GREEN%Found Visual Studio at: %VS_PATH%%RESET%
+
+REM Setup build environment
+call "%VS_PATH%\VC\Auxiliary\Build\vcvars64.bat"
+if errorlevel 1 (
+    echo %RED%Error: Failed to setup VC environment%RESET%
     exit /b 1
 )
 
 REM Find Java JNI headers
 if not defined JAVA_HOME (
-    for /f "tokens=*" %%i in ('where java') do set JAVA_BIN=%%i
-    for %%i in ("!JAVA_BIN!") do set JAVA_DIR=%%~dpi
-    for %%i in ("!JAVA_DIR!..") do set JAVA_HOME=%%~fi
+    set "JAVA_HOME=C:\Program Files\Java\jdk-25"
 )
-
 if not exist "%JAVA_HOME%\include\jni.h" (
-    echo %RED%Error: JAVA_HOME not set or jni.h not found%RESET%
-    echo %YELLOW%Please set JAVA_HOME environment variable%RESET%
-    exit /b 1
+    set "JAVA_HOME=C:\Program Files\Java\jdk-25"
 )
 
 echo %GREEN%Found Java at: %JAVA_HOME%%RESET%
@@ -54,10 +66,12 @@ REM /EHsc - Exception handling
 REM /W3 - Warning level 3
 REM /MD - Multi-threaded DLL runtime
 REM /DNDEBUG - Release mode
-set COMMON_FLAGS=/O2 /arch:AVX2 /EHsc /W3 /MD /DNDEBUG /nologo
+set COMMON_FLAGS=/O2 /arch:AVX2 /EHsc /W3 /MD
+set "JNI_INCLUDE=%JAVA_HOME%\include"
+set "JNI_WIN=%JAVA_HOME%\include\win32"
 
 REM Include paths
-set INCLUDES=/I "%JAVA_HOME%\include" /I "%JAVA_HOME%\include\win32" /I "native"
+set INCLUDES=/I "%JNI_INCLUDE%" /I "%JNI_WIN%" /I "native"
 
 echo.
 echo %YELLOW%Compiling with AVX2 SIMD optimizations...%RESET%
@@ -66,7 +80,7 @@ echo.
 
 REM Compile
 echo Compiling fastjson.cpp...
-cl %COMMON_FLAGS% %INCLUDES^ /c /Fo%BUILD_DIR%\fastjson.obj native\fastjson.cpp
+cl %COMMON_FLAGS% %INCLUDES% /c /Fo%BUILD_DIR%\fastjson.obj native\fastjson.cpp
 
 if %ERRORLEVEL% neq 0 (
     echo %RED%Compilation failed!%RESET%

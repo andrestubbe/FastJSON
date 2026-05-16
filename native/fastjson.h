@@ -10,7 +10,7 @@
  * @par Features
  * - Lazy parsing: Parse on-demand for large documents
  * - Strict mode: RFC 8259 compliant validation
- * - Comments: Support for // and /* */ style comments
+ * - Comments: Support for // and C-style comments
  * - Streaming: Parse from ByteBuffer without copying
  *
  * @par Value Types

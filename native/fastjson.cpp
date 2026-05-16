@@ -7,8 +7,14 @@
 // Platform-specific SIMD headers
 #ifdef _WIN32
     #include <intrin.h>
+    static inline int ctz(unsigned int mask) {
+        unsigned long index;
+        if (_BitScanForward(&index, mask)) return index;
+        return 32;
+    }
 #else
     #include <x86intrin.h>
+    #define ctz(mask) __builtin_ctz(mask)
 #endif
 
 namespace fastjson {
@@ -94,7 +100,7 @@ int findTokenAvx2(const uint8_t* data, size_t length, uint8_t token) {
         int mask = _mm256_movemask_epi8(cmp);
         
         if (mask != 0) {
-            return static_cast<int>(i + __builtin_ctz(mask));
+            return static_cast<int>(i + ctz(mask));
         }
     }
     
@@ -114,7 +120,7 @@ int findTokenSse42(const uint8_t* data, size_t length, uint8_t token) {
         int mask = _mm_movemask_epi8(cmp);
         
         if (mask != 0) {
-            return static_cast<int>(i + __builtin_ctz(mask));
+            return static_cast<int>(i + ctz(mask));
         }
     }
     
@@ -173,7 +179,7 @@ int skipWhitespaceAvx2(const uint8_t* data, size_t length) {
         mask = ~mask & 0xFFFFFFFF;
         
         if (mask != 0) {
-            return static_cast<int>(i + __builtin_ctz(mask));
+            return static_cast<int>(i + ctz(mask));
         }
     }
     
@@ -202,7 +208,7 @@ int skipWhitespaceSse42(const uint8_t* data, size_t length) {
         mask = ~mask & 0xFFFF;
         
         if (mask != 0) {
-            return static_cast<int>(i + __builtin_ctz(mask));
+            return static_cast<int>(i + ctz(mask));
         }
     }
     
@@ -252,6 +258,15 @@ int findStringEndScalar(const uint8_t* data, size_t length) {
 // ============================================================================
 // JNI IMPLEMENTATIONS
 // ============================================================================
+
+namespace fastjson {
+    // Object field structure
+    struct Field {
+        const uint8_t* keyData;      // Key string in source buffer
+        size_t keyLength;            // Key length
+        ValueHandle* value;        // Value handle
+    };
+}
 
 using namespace fastjson;
 
@@ -551,13 +566,6 @@ ValueHandle* createValue(int type) {
     value->sourceLength = 0;
     return value;
 }
-
-// Object field structure
-struct Field {
-    const uint8_t* keyData;      // Key string in source buffer
-    size_t keyLength;            // Key length
-    ValueHandle* value;        // Value handle
-};
 
 void freeValue(ValueHandle* value) {
     if (!value) return;

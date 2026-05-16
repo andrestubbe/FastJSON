@@ -25,7 +25,7 @@ public class FastJSON {
     private static final int LIBRARY_VERSION = 100; // 1.0.0
     
     static {
-        FastCore.loadLibrary(LIBRARY_NAME, LIBRARY_VERSION);
+        FastCore.loadLibrary(LIBRARY_NAME);
     }
     
     // Native method declarations

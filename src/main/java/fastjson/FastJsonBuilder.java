@@ -435,8 +435,8 @@ public class FastJsonBuilder {
         out.append('"');
         
         byte[] bytes = fs.getBytes();
-        int offset = fs.getOffset();
-        int length = fs.getLength();
+        int offset = 0;
+        int length = fs.byteLength();
         
         for (int i = 0; i < length; i++) {
             byte b = bytes[offset + i];
