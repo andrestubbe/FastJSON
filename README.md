@@ -1,41 +1,54 @@
-# FastJSON — Zero-copy JSON parser for Java
+# FastJSON v0.1.0 — Ultra-Fast Native JSON Parser for Java
 
-> ⚡ **50× faster** than Jackson/Gson | **Zero-copy parsing** | **SIMD-accelerated**
+**A high-performance native JSON module for the FastJava ecosystem. Optimized for raw throughput and zero-copy parsing via SIMD.**
 
-[![Build](https://img.shields.io/badge/build-passing-brightgreen.svg)]()
+[![Build](https://img.shields.io/github/actions/workflow/status/andrestubbe/FastJSON/maven.yml?branch=main)](https://github.com/andrestubbe/FastJSON/actions)
 [![Java](https://img.shields.io/badge/Java-17+-blue.svg)](https://www.java.com)
-[![Platform](https://img.shields.io/badge/Platform-Windows%2010+-lightgrey.svg)]()
+[![Platform](https://img.shields.io/badge/Platform-Windows-lightgrey.svg)]()
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![JitPack](https://jitpack.io/v/andrestubbe/FastJSON.svg)](https://jitpack.io/#andrestubbe/FastJSON)
 
-**FastJSON** replaces Jackson/Gson with a **zero-copy, SIMD-accelerated** implementation. Built for high-frequency JSON processing without GC overhead.
+---
+
+**FastJSON** delivers elite parsing performance by leveraging native SIMD instructions and optimized memory handling. Built for high-frequency API requests and massive data processing pipelines.
+
+```java
+// Quick Start — Example
+import fastjson.FastJSON;
+import fastjson.FastJsonValue;
+
+public class Demo {
+    public static void main(String[] args) {
+        FastJsonValue doc = FastJSON.parse("{\"status\":\"ok\", \"latency\": 120}");
+        System.out.println("Status: " + doc.getString("status"));
+    }
+}
+```
 
 ---
 
-## 🚀 Performance
-
-| Operation | Jackson | FastJSON | Speedup |
-|-----------|---------|----------|---------|
-| **Parse small object** | 2,500 ns | 150 ns | **17× faster** |
-| **Parse large array** | 150,000 ns | 8,000 ns | **19× faster** |
-| **Extract single field** | 2,500 ns | 50 ns | **50× faster** *(lazy)* |
-| **String field access** | 1,200 ns | 0 ns | **∞** *(zero-copy)* |
-| **Memory overhead** | High | Minimal | **10× less GC** |
-
-*Benchmarked on Intel i7-12700K, Windows 11, Java 17, 1KB JSON document*
-
-**Why so fast?**
-- **UTF-8 direct** — No String conversion (Jackson/Gson use UTF-16)
-- **SIMD tokenizing** — AVX2 scans 32 bytes/cycle for `{`, `"`, `:`
-- **Lazy parsing** — Only parse what you actually access
-- **Zero-copy views** — String values reference original buffer
+## Table of Contents
+- [Features](#features)
+- [Performance](#performance)
+- [Installation](#installation)
+- [License](#license)
+- [Related Projects](#related-projects)
 
 ---
 
-## 📦 Installation
+## Features
+- **⚡ SIMD Accelerated**: Native JSON parsing optimizations (AVX2/SSE).
+- **📦 Zero-Copy**: Direct access to native byte buffers bypassing String overhead.
+- **🚀 Raw Performance**: Optimized for massive data throughput (50x faster than Jackson).
+- **🖇️ Ecosystem Ready**: Seamless integration with FastIO and FastCore.
+
+---
+
+## Installation
+
+FastJSON requires **two** dependencies: the module itself and `FastCore` (the native loader).
 
 ### Maven (JitPack)
-
 ```xml
 <repositories>
     <repository>
@@ -45,387 +58,50 @@
 </repositories>
 
 <dependencies>
+    <!-- 1. FastJSON Library -->
+    <dependency>
+        <groupId>io.github.andrestubbe</groupId>
+        <artifactId>fastjson</artifactId>
+        <version>0.1.0</version>
+    </dependency>
+
+    <!-- 2. FastCore (Mandatory Native Loader) -->
     <dependency>
         <groupId>com.github.andrestubbe</groupId>
-        <artifactId>fastjson</artifactId>
-        <version>v1.0.0</version>
+        <artifactId>fastcore</artifactId>
+        <version>0.1.0</version>
     </dependency>
 </dependencies>
 ```
 
-### Gradle
-
+### Gradle (JitPack)
 ```groovy
 repositories {
     maven { url 'https://jitpack.io' }
 }
 
 dependencies {
-    implementation 'com.github.andrestubbe:fastjson:v1.0.0'
+    implementation 'io.github.andrestubbe:fastjson:0.1.0'
+    implementation 'com.github.andrestubbe:fastcore:0.1.0'
 }
 ```
 
-### Direct Download
+### Option 3: Direct Download (No Build Tool)
+Download the latest JARs directly to add them to your classpath:
 
-Download JAR from [Releases](https://github.com/andrestubbe/fastjson/releases)
-
-Requires FastCore for native loading:
-- `fastjson-1.0.0.jar` — Main library
-- `fastcore-1.0.0.jar` — [JNI loader](https://github.com/andrestubbe/FastCore/releases)
+1. 📦 [**fastjson-v0.1.0.jar**](https://github.com/andrestubbe/FastJSON/releases/download/v0.1.0/fastjson-0.1.0.jar)
+2. ⚙️ [**fastcore-v0.1.0.jar**](https://github.com/andrestubbe/fastcore/releases/download/v0.1.0/fastcore-0.1.0.jar)
 
 ---
 
-## 💡 Quick Start
-
-```java
-import fastjson.FastJSON;
-import fastjson.FastJsonValue;
-
-// Parse from String
-FastJsonValue doc = FastJSON.parse("{\"name\":\"John\",\"age\":30}");
-
-// Lazy field access - parsed on demand, not upfront
-String name = doc.getString("name");  // "John"
-int age = doc.getInt("age");          // 30
-
-// Zero-copy: Strings reference original buffer, no allocation
-FastString fastName = doc.getFastString("name");  // No GC!
-
-// Arrays
-FastJsonValue items = FastJSON.parse("[1, 2, 3, 4, 5]");
-for (FastJsonValue item : items.elements()) {
-    System.out.println(item.asInt());  // 1, 2, 3, 4, 5
-}
-
-// Build JSON
-byte[] json = FastJSON.object()
-    .add("name", "Jane")
-    .add("age", 25)
-    .add("active", true)
-    .build();
-
-// Parse from bytes (zero-copy on DirectByteBuffer)
-ByteBuffer buffer = ByteBuffer.allocateDirect(1024);
-buffer.put("{\"status\":\"ok\"}".getBytes());
-buffer.flip();
-FastJsonValue status = FastJSON.parse(buffer);
-```
-
----
-
-## 🔥 Why FastJSON?
-
-### The Jackson/Gson Problem
-
-```java
-// Traditional: Parses entire document, creates objects for everything
-Person person = mapper.readValue(json, Person.class);  // 2,500ns + GC
-
-// FastJSON: Zero-copy, lazy parsing, no GC
-FastJsonValue doc = FastJSON.parse(json);  // 150ns
-doc.getString("name");  // Access single field, rest stays unparsed
-```
-
-### Real-World Use Cases
-
-```java
-// 1. High-Frequency Trading (1000 JSON messages/sec)
-// Traditional: 2.5ms + GC pauses → missed trades
-// FastJSON: 150μs, no GC → sub-millisecond processing
-
-// 2. AI API Integration (OpenAI/Claude/Ollama)
-FastJsonValue response = FastJSON.parse(apiResponseBytes);
-String content = response.path("choices[0].message.content").asString();
-// 50× faster than Jackson ObjectNode traversal
-
-// 3. Game Netcode (State Snapshots)
-FastJsonValue state = FastJSON.parse(udpPacket);
-float x = state.getFloat("players[0].pos.x", 0f);
-float y = state.getFloat("players[0].pos.y", 0f);
-// Parse only position, ignore inventory/quests/etc
-
-// 4. IoT Telemetry Ingestion
-// 10,000 sensors × JSON/min = massive GC pressure
-// FastJSON: Zero-allocation string views, survive GC storms
-
-// 5. Log Analytics Pipeline
-FastJsonValue log = FastJSON.parse(logLine);
-if (log.getOrThrow("level").asString().equals("ERROR")) {
-    alertService.send(log.getString("message"));
-}
-// getOrThrow() - fail fast on malformed logs
-```
-
-### The Zero-Copy Advantage
-
-```java
-// Processing 1000 JSON messages/second
-// Jackson: 2.5μs × 1000 = 2.5ms + heavy GC
-// FastJSON: 150ns × 1000 = 150μs + minimal GC
-
-// Real-world: High-frequency trading, game netcode, AI APIs
-FastJsonValue response = FastJSON.parse(apiResponse);
-String status = response.getString("status");  // Instant, no allocation
-```
-
----
-
-## 🎯 Key Features
-
-| Feature | Jackson/Gson | FastJSON |
-|---------|--------------|----------|
-| **Encoding** | UTF-16 (2× memory) | UTF-8 direct |
-| **SIMD Parsing** | ❌ No | ✅ AVX2/SSE4.2 |
-| **Lazy Evaluation** | ❌ Full parse | ✅ Parse-on-access |
-| **Zero-Copy Strings** | ❌ Allocations | ✅ Buffer views |
-| **Reflection** | ✅ Heavy | ❌ None (faster) |
-| **Streaming** | ✅ Yes | 🚧 Planned |
-
----
-
-## 📊 Detailed Benchmarks
-
-Run benchmarks yourself:
-
-```bash
-mvn exec:java
-```
-
-*Benchmarked on Intel i7-12700K, Windows 11, Java 17, JMH-style measurement with warmup*
-
-### Parse Performance by Document Size
-
-| Document | Size | Library | ns/op | MB/s | vs Jackson |
-|----------|------|---------|-------|------|------------|
-| **Flat Object** | 1KB | **FastJSON** | **180 ns** | **5,400** | **16.7×** |
-| | | Jackson | 3,000 ns | 320 | 1.0× |
-| | | Gson | 3,800 ns | 256 | 0.8× |
-| **Flat Object** | 50KB | **FastJSON** | **4,200 ns** | **11,900** | **19.0×** |
-| | | Jackson | 79,800 ns | 627 | 1.0× |
-| | | Gson | 95,000 ns | 526 | 0.8× |
-| **Flat Object** | 1MB | **FastJSON** | **82,000 ns** | **12,800** | **17.1×** |
-| | | Jackson | 1,400,000 ns | 750 | 1.0× |
-| | | Gson | 1,680,000 ns | 625 | 0.8× |
-
-### Parse Performance by Structure Type (1KB documents)
-
-| Structure | FastJSON | Jackson | Gson | FastJSON Advantage |
-|-----------|----------|---------|------|-------------------|
-| **Flat Object** (10 fields) | 180 ns | 3,000 ns | 3,800 ns | **16.7× faster** |
-| **Nested Object** (depth 5) | 220 ns | 3,500 ns | 4,200 ns | **15.9× faster** |
-| **Array of Objects** (20 items) | 195 ns | 3,200 ns | 4,000 ns | **16.4× faster** |
-
-### 🚀 Lazy Parsing Advantage
-
-Single field extraction from 50KB JSON document:
-
-| Library | Strategy | ns/op | Allocation |
-|---------|----------|-------|------------|
-| **FastJSON** | **Lazy (one field)** | **45 ns** | **32 bytes** |
-| Jackson | Full parse + navigate | 79,800 ns | 150 KB |
-| Gson | Full parse + navigate | 95,000 ns | 180 KB |
-
-**Result:** FastJSON is **1,773× faster** for single-field access with **4,800× less memory**.
-
-### 💾 Memory Efficiency
-
-Allocations per 1KB document parse:
-
-| Library | Allocations | Relative |
-|---------|-------------|----------|
-| **FastJSON** | **64 bytes** | **1×** (baseline) |
-| Jackson | 3,200 bytes | **50× more** |
-| Gson | 3,800 bytes | **59× more** |
-
-Over 10,000 documents:
-- **FastJSON:** ~640 KB total allocations
-- **Jackson:** ~32 MB total allocations  
-- **Gson:** ~38 MB total allocations
-
-### 🎯 Summary
-
-| Metric | FastJSON vs Jackson | FastJSON vs Gson |
-|--------|---------------------|------------------|
-| **Parse Speed** | **17.6× faster** (avg) | **21.2× faster** (avg) |
-| **Lazy Field Access** | **1,773× faster** | **2,111× faster** |
-| **Memory Efficiency** | **50× fewer allocations** | **59× fewer allocations** |
-| **Throughput** | Up to **12,800 MB/s** | vs ~750 MB/s |
-
----
-
-## 🔧 API Reference
-
-### Parsing
-
-```java
-// From String
-FastJsonValue doc = FastJSON.parse(jsonString);
-
-// From bytes (zero-copy if UTF-8)
-byte[] utf8Bytes = json.getBytes(StandardCharsets.UTF_8);
-FastJsonValue doc = FastJSON.parse(utf8Bytes);
-
-// From FastString (zero-copy)
-FastString fastJson = new FastString(json);
-FastJsonValue doc = FastJSON.parse(fastJson);
-
-// From ByteBuffer (zero-copy on direct buffers)
-ByteBuffer buffer = ByteBuffer.allocateDirect(1024);
-FastJsonValue doc = FastJSON.parse(buffer);
-```
-
-### Object Access
-
-```java
-// Field access with defaults
-doc.getString("name");                    // Returns null if missing
-doc.getString("name", "default");       // With default
-doc.getInt("age");                      // 0 if missing
-doc.getInt("age", -1);                  // With default
-doc.getLong("id");
-doc.getDouble("price");
-doc.getBoolean("active");
-
-// Check existence
-if (doc.has("optional_field")) { ... }
-
-// Zero-copy string access
-FastString name = doc.getFastString("name");  // No allocation!
-```
-
-### Array Access
-
-```java
-FastJsonValue arr = FastJSON.parse("[1, 2, 3]");
-
-// By index
-int first = arr.get(0).asInt();
-
-// Size
-int count = arr.size();
-
-// Iterate
-for (FastJsonValue item : arr.elements()) {
-    System.out.println(item.asInt());
-}
-```
-
-### Building JSON
-
-```java
-// Object
-byte[] json = FastJSON.object()
-    .add("name", "John")
-    .add("age", 30)
-    .add("balance", 1234.56)
-    .add("active", true)
-    .addNull("deleted_at")
-    .add("address", FastJSON.object()
-        .add("city", "NYC")
-        .add("zip", "10001"))
-    .build();
-
-// Array
-byte[] json = FastJSON.array()
-    .add("item1")
-    .add(42)
-    .add(true)
-    .addNull()
-    .build();
-
-// To String
-String jsonStr = FastJSON.object()
-    .add("status", "ok")
-    .buildString();
-```
-
-### Type Checking
-
-```java
-if (doc.isObject()) { ... }
-if (doc.isArray()) { ... }
-if (doc.isString()) { ... }
-if (doc.isNumber()) { ... }
-if (doc.isInt()) { ... }
-if (doc.isBoolean()) { ... }
-if (doc.isNull()) { ... }
-
-// Get type
-int type = doc.getType();  // FastJsonValue.TYPE_OBJECT, etc.
-```
-
-### Resource Management
-
-```java
-// Auto-closeable - releases native memory
-try (FastJsonValue doc = FastJSON.parse(largeJson)) {
-    // Use doc
-    String name = doc.getString("name");
-}  // Native memory freed here
-
-// Or manual close
-FastJsonValue doc = FastJSON.parse(json);
-// ... use doc ...
-doc.close();  // Free native resources
-```
-
----
-
-## 🏗️ Architecture
-
-```
-┌─────────────────────────────────────────────────┐
-│            Java FastJSON API                      │
-│  - FastJSON.parse()                             │
-│  - FastJsonValue.get()                            │
-│  - Lazy field access                              │
-└─────────────────────────────────────────────────┘
-                       │
-                       ▼ JNI
-┌─────────────────────────────────────────────────┐
-│           C++ FastJSON Engine                     │
-│  - AVX2 token scanning (32 bytes/cycle)           │
-│  - Zero-copy string views                         │
-│  - Lazy object/array parsing                      │
-│  - 32-byte aligned memory                         │
-└─────────────────────────────────────────────────┘
-```
-
-**Lazy Parsing Explained:**
-- Traditional: Parse entire document → Create Java objects for everything
-- FastJSON: Parse structure only → Create views pointing to original buffer
-- Field access: Parse that specific field on demand
-- Result: 50× faster for partial document access
-
----
-
-## Build from Source
-
-See [COMPILE.md](COMPILE.md) for detailed build instructions.
-
----
-
-## 📝 Requirements
-
-- **Java**: 17 or higher
-- **OS**: Windows 10/11 (x64) - Linux/macOS coming soon
-- **CPU**: Intel/AMD with SSE4.2 (AVX2 recommended)
-- **Native**: MSVC (Windows) for SIMD compilation
-
----
-
-## 📜 License
-
+## License
 MIT License — See [LICENSE](LICENSE) for details.
 
 ---
 
-## 🔗 Related Projects
-
-- [FastCore](https://github.com/andrestubbe/fastcore) — JNI loader foundation
-- [FastString](https://github.com/andrestubbe/faststring) — UTF-8 string operations
-- [FastBytes](https://github.com/andrestubbe/fastbytes) — Byte buffer utilities
+## Related Projects
+- [FastCore](https://github.com/andrestubbe/FastCore) — Native Library Loader
+- [FastIO](https://github.com/andrestubbe/FastIO) — High-performance File I/O
 
 ---
-
-**Part of the FastJava Ecosystem** — *Making the JVM faster.*
+**Made with ⚡ by Andre Stubbe**
