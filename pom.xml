@@ -61,14 +61,14 @@
         <dependency>
             <groupId>io.github.andrestubbe</groupId>
             <artifactId>faststring</artifactId>
-            <version>1.0.0</version>
+            <version>0.1.0</version>
         </dependency>
 
         <!-- FastBytes - Byte buffer operations -->
         <dependency>
             <groupId>io.github.andrestubbe</groupId>
             <artifactId>fastbytes</artifactId>
-            <version>1.0.0</version>
+            <version>0.1.0</version>
         </dependency>
 
         <!-- JUnit 5 for testing -->
