@@ -1,4 +1,4 @@
-# FastJSON — Ultra-Fast Native JSON Parser for Java v0.1.0 [ALPHA] - v0.1.0
+﻿# FastJSON â€” Ultra-Fast Native JSON Parser for Java v0.1.0 [ALPHA] - v0.1.0
 **A high-performance native JSON module for the FastJava ecosystem. Optimized for raw throughput and zero-copy parsing via SIMD.**
 
 [![Build](https://img.shields.io/github/actions/workflow/status/andrestubbe/FastJSON/maven.yml?branch=main)](https://github.com/andrestubbe/FastJSON/actions)
@@ -12,7 +12,7 @@
 **FastJSON** delivers elite parsing performance by leveraging native SIMD instructions and optimized memory handling. Built for high-frequency API requests and massive data processing pipelines.
 
 ```java
-// Quick Start — Example
+// Quick Start â€” Example
 import fastjson.FastJSON;
 import fastjson.FastJsonValue;
 
@@ -36,10 +36,10 @@ public class Demo {
 ---
 
 ## Features
-- **⚡ SIMD Accelerated**: Native JSON parsing optimizations (AVX2/SSE).
-- **📦 Zero-Copy**: Direct access to native byte buffers bypassing String overhead.
-- **🚀 Raw Performance**: Optimized for massive data throughput (50x faster than Jackson).
-- **🖇️ Ecosystem Ready**: Seamless integration with FastIO and FastCore.
+- **âš¡ SIMD Accelerated**: Native JSON parsing optimizations (AVX2/SSE).
+- **ðŸ“¦ Zero-Copy**: Direct access to native byte buffers bypassing String overhead.
+- **ðŸš€ Raw Performance**: Optimized for massive data throughput (50x faster than Jackson).
+- **ðŸ–‡ï¸ Ecosystem Ready**: Seamless integration with FastIO and FastCore.
 
 ---
 
@@ -48,7 +48,7 @@ public class Demo {
 ### Option 1: Maven (Recommended)
 Add the JitPack repository and the dependencies to your `pom.xml`:
 
-`xml
+```xml
 <repositories>
     <repository>
         <id>jitpack.io</id>
@@ -63,6 +63,7 @@ Add the JitPack repository and the dependencies to your `pom.xml`:
         <artifactId>fastjson</artifactId>
         <version>v0.1.0</version>
     </dependency>
+
     <!-- FastCore (Required Native Loader) -->
     <dependency>
         <groupId>com.github.andrestubbe</groupId>
@@ -70,19 +71,19 @@ Add the JitPack repository and the dependencies to your `pom.xml`:
         <version>v0.1.0</version>
     </dependency>
 </dependencies>
-`
+```
 
 ### Option 2: Gradle (via JitPack)
-`groovy
+```groovy
 repositories {
     maven { url 'https://jitpack.io' }
 }
 
 dependencies {
-    implementation 'com.github.andrestubbe:.1.0'
+    implementation 'com.github.andrestubbe:fastjson:v0.1.0'
     implementation 'com.github.andrestubbe:fastcore:v0.1.0'
 }
-`
+```
 
 ### Option 3: Direct Download (No Build Tool)
 Download the latest JARs directly to add them to your classpath:
@@ -95,14 +96,14 @@ Download the latest JARs directly to add them to your classpath:
 
 
 ## License
-MIT License — See [LICENSE](LICENSE) for details.
+MIT License â€” See [LICENSE](LICENSE) for details.
 
 ---
 
 ## Related Projects
-- [FastCore](https://github.com/andrestubbe/FastCore) — Native Library Loader
-- [FastIO](https://github.com/andrestubbe/FastIO) — High-performance File I/O
+- [FastCore](https://github.com/andrestubbe/FastCore) â€” Native Library Loader
+- [FastIO](https://github.com/andrestubbe/FastIO) â€” High-performance File I/O
 
 ---
-**Made with ⚡ by Andre Stubbe**
+**Made with âš¡ by Andre Stubbe**
 
