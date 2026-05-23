@@ -1,11 +1,11 @@
 ﻿# FastJSON — Ultra-Fast Native JSON Parser for Java v0.1.0 [ALPHA] - v0.1.0
 **A high-performance native JSON module for the FastJava ecosystem. Optimized for raw throughput and zero-copy parsing via SIMD.**
 
-[![Build](https://img.shields.io/github/actions/workflow/status/andrestubbe/FastJSON/maven.yml?branch=main)](https://github.com/andrestubbe/FastJSON/actions)
-[![Java](https://img.shields.io/badge/Java-17+-blue.svg)](https://www.java.com)
-[![Platform](https://img.shields.io/badge/Platform-Windows-lightgrey.svg)]()
+[![Status](https://img.shields.io/badge/status-v0.1.0-brightgreen.svg)](https://github.com/andrestubbe/FastJSON/releases/tag/v0.1.0)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![JitPack](https://jitpack.io/v/andrestubbe/FastJSON.svg)](https://jitpack.io/#andrestubbe/FastJSON)
+[![Java](https://img.shields.io/badge/Java-17+-blue.svg)](https://www.java.com)
+[![Platform](https://img.shields.io/badge/Platform-Windows%2010+-lightgrey.svg)]()
+[![JitPack](https://img.shields.io/badge/JitPack-ready-green.svg)](https://jitpack.io/#andrestubbe)
 
 ---
 
