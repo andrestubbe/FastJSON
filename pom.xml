@@ -7,9 +7,7 @@
 
     <groupId>com.github.andrestubbe</groupId>
             <artifactId>fastjson</artifactId>
-           <version>0.1.0</version>
-     <version>0.1.0</version>
-     <version>0.1.0</version>
+    <version>0.1.0</version>
     <packaging>jar</packaging>
 
     <name>FastJSON</name>
@@ -295,3 +293,4 @@
         </snapshotRepository>
     </distributionManagement>
 </project>
+
