@@ -1,5 +1,4 @@
-﻿# FastJSON — Ultra-Fast Native JSON Parser for Java v0.1.0 [ALPHA] - v0.1.0
-**A high-performance native JSON module for the FastJava ecosystem. Optimized for raw throughput and zero-copy parsing via SIMD.**
+﻿# FastJSON v0.1.0 [ALPHA] — Ultra-Fast Native JSON Parser for Java
 
 [![Status](https://img.shields.io/badge/status-v0.1.0-brightgreen.svg)](https://github.com/andrestubbe/FastJSON/releases/tag/v0.1.0)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -7,9 +6,15 @@
 [![Platform](https://img.shields.io/badge/Platform-Windows%2010+-lightgrey.svg)]()
 [![JitPack](https://img.shields.io/badge/JitPack-ready-green.svg)](https://jitpack.io/#andrestubbe)
 
----
+**⚡ A high-performance native JSON module for the FastJava ecosystem. Optimized for raw throughput and zero-copy parsing via SIMD.**
 
-**FastJSON** delivers elite parsing performance by leveraging native SIMD instructions and optimized memory handling. Built for high-frequency API requests and massive data processing pipelines.
+
+FastJSON delivers elite parsing performance by leveraging native SIMD instructions and optimized memory handling. Built for high-frequency API requests and massive data processing pipelines.
+
+
+[![FastKeyboard Showcase](docs/screenshot.png)](https://www.youtube.com/watch?v=BZsqQl7WqWk)
+
+
 
 ```java
 // Quick Start — Example
@@ -94,16 +99,21 @@ Download the latest JARs directly to add them to your classpath:
 > [!IMPORTANT]
 > All JARs must be in your classpath for the native JNI calls to function correctly.
 
+---
 
 ## License
-MIT License — See [LICENSE](LICENSE) for details.
+MIT License — See [LICENSE](LICENSE) file for details.
 
 ---
 
 ## Related Projects
-- [FastCore](https://github.com/andrestubbe/FastCore) — Native Library Loader
-- [FastIO](https://github.com/andrestubbe/FastIO) — High-performance File I/O
+- [FastCore](https://github.com/andrestubbe/FastCore) — Native Library Loader for Java
+- [FastKeyboard](https://github.com/andrestubbe/FastKeyboard) — High-performance RawInput engine
+- [FastTheme](https://github.com/andrestubbe/FastTheme) — Advanced UI styling engine
 
 ---
-**Made with ⚡ by Andre Stubbe**
+**Part of the FastJava Ecosystem** — *Making the JVM faster.*
+
+
+
 
