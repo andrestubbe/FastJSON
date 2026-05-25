@@ -6,18 +6,30 @@
 [![Platform](https://img.shields.io/badge/Platform-Windows%2010+-lightgrey.svg)]()
 [![JitPack](https://img.shields.io/badge/JitPack-ready-green.svg)](https://jitpack.io/#andrestubbe)
 
-**⚡ A high-performance native JSON module for the FastJava ecosystem. Optimized for raw throughput and zero-copy parsing via SIMD.**
+**⚡ A high-performance native JSON module for the FastJava ecosystem. Optimized for raw throughput and zero-copy parsing
+via SIMD.**
 
-
-FastJSON delivers elite parsing performance by leveraging native SIMD instructions and optimized memory handling. Built for high-frequency API requests and massive data processing pipelines.
-
+FastJSON delivers elite parsing performance by leveraging native SIMD instructions and optimized memory handling. Built
+for high-frequency API requests and massive data processing pipelines.
 
 [![FastKeyboard Showcase](docs/screenshot.png)](https://www.youtube.com/watch?v=BZsqQl7WqWk)
 
 
+---
+
+## Table of Contents
+
+- [Features](#features)
+- [Performance](#performance)
+- [Installation](#installation)
+- [License](#license)
+- [Related Projects](#related-projects)
+
+---
+
+## Quick Start
 
 ```java
-// Quick Start — Example
 import fastjson.FastJSON;
 import fastjson.FastJsonValue;
 
@@ -31,16 +43,8 @@ public class Demo {
 
 ---
 
-## Table of Contents
-- [Features](#features)
-- [Performance](#performance)
-- [Installation](#installation)
-- [License](#license)
-- [Related Projects](#related-projects)
-
----
-
 ## Features
+
 - **⚡ SIMD Accelerated**: Native JSON parsing optimizations (AVX2/SSE).
 - **📦 Zero-Copy**: Direct access to native byte buffers bypassing String overhead.
 - **🚀 Raw Performance**: Optimized for massive data throughput (50x faster than Jackson).
@@ -51,9 +55,11 @@ public class Demo {
 ## Installation
 
 ### Option 1: Maven (Recommended)
+
 Add the JitPack repository and the dependencies to your `pom.xml`:
 
 ```xml
+
 <repositories>
     <repository>
         <id>jitpack.io</id>
@@ -62,23 +68,24 @@ Add the JitPack repository and the dependencies to your `pom.xml`:
 </repositories>
 
 <dependencies>
-    <!-- FastJSON Library -->
-    <dependency>
-        <groupId>com.github.andrestubbe</groupId>
-        <artifactId>fastjson</artifactId>
-        <version>v0.1.0</version>
-    </dependency>
+<!-- FastJSON Library -->
+<dependency>
+    <groupId>com.github.andrestubbe</groupId>
+    <artifactId>fastjson</artifactId>
+    <version>v0.1.0</version>
+</dependency>
 
-    <!-- FastCore (Required Native Loader) -->
-    <dependency>
-        <groupId>com.github.andrestubbe</groupId>
-        <artifactId>fastcore</artifactId>
-        <version>v0.1.0</version>
-    </dependency>
+<!-- FastCore (Required Native Loader) -->
+<dependency>
+    <groupId>com.github.andrestubbe</groupId>
+    <artifactId>fastcore</artifactId>
+    <version>v0.1.0</version>
+</dependency>
 </dependencies>
 ```
 
 ### Option 2: Gradle (via JitPack)
+
 ```groovy
 repositories {
     maven { url 'https://jitpack.io' }
@@ -91,10 +98,13 @@ dependencies {
 ```
 
 ### Option 3: Direct Download (No Build Tool)
+
 Download the latest JARs directly to add them to your classpath:
 
-1. 📦 **[fastjson-v0.1.0.jar](https://github.com/andrestubbe/FastJSON/releases/download/v0.1.0/fastjson-v0.1.0.jar)** (The Core Library)
-2. ⚙️ **[fastcore-v0.1.0.jar](https://github.com/andrestubbe/FastCore/releases/download/v0.1.0/fastcore-v0.1.0.jar)** (The Mandatory Native Loader)
+1. 📦 **[fastjson-v0.1.0.jar](https://github.com/andrestubbe/FastJSON/releases/download/v0.1.0/fastjson-v0.1.0.jar)** (
+   The Core Library)
+2. ⚙️ **[fastcore-v0.1.0.jar](https://github.com/andrestubbe/FastCore/releases/download/v0.1.0/fastcore-v0.1.0.jar)** (
+   The Mandatory Native Loader)
 
 > [!IMPORTANT]
 > All JARs must be in your classpath for the native JNI calls to function correctly.
@@ -102,11 +112,13 @@ Download the latest JARs directly to add them to your classpath:
 ---
 
 ## License
+
 MIT License — See [LICENSE](LICENSE) file for details.
 
 ---
 
 ## Related Projects
+
 - [FastCore](https://github.com/andrestubbe/FastCore) — Native Library Loader for Java
 - [FastKeyboard](https://github.com/andrestubbe/FastKeyboard) — High-performance RawInput engine
 - [FastTheme](https://github.com/andrestubbe/FastTheme) — Advanced UI styling engine
