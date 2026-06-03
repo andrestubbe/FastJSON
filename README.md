@@ -1,4 +1,4 @@
-﻿# FastJSON v0.1.0 [ALPHA] — Ultra-Fast Native JSON Parser for Java
+# FastJSON v0.1.0 [ALPHA] � Ultra-Fast Native JSON Parser for Java
 
 [![Status](https://img.shields.io/badge/status-v0.1.0-brightgreen.svg)](https://github.com/andrestubbe/FastJSON/releases/tag/v0.1.0)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -6,7 +6,7 @@
 [![Platform](https://img.shields.io/badge/Platform-Windows%2010+-lightgrey.svg)]()
 [![JitPack](https://img.shields.io/badge/JitPack-ready-green.svg)](https://jitpack.io/#andrestubbe)
 
-**⚡ A high-performance native JSON module for the FastJava ecosystem. Optimized for raw throughput and zero-copy parsing
+**? A high-performance native JSON module for the FastJava ecosystem. Optimized for raw throughput and zero-copy parsing
 via SIMD.**
 
 FastJSON delivers elite parsing performance by leveraging native SIMD instructions and optimized memory handling. Built
@@ -45,10 +45,10 @@ public class Demo {
 
 ## Features
 
-- **⚡ SIMD Accelerated**: Native JSON parsing optimizations (AVX2/SSE).
-- **📦 Zero-Copy**: Direct access to native byte buffers bypassing String overhead.
-- **🚀 Raw Performance**: Optimized for massive data throughput (50x faster than Jackson).
-- **🖇️ Ecosystem Ready**: Seamless integration with FastIO and FastCore.
+- **? SIMD Accelerated**: Native JSON parsing optimizations (AVX2/SSE).
+- **?? Zero-Copy**: Direct access to native byte buffers bypassing String overhead.
+- **?? Raw Performance**: Optimized for massive data throughput (50x faster than Jackson).
+- **??? Ecosystem Ready**: Seamless integration with FastIO and FastCore.
 
 ---
 
@@ -95,9 +95,9 @@ dependencies {
 
 Download the latest JARs directly to add them to your classpath:
 
-1. 📦 **[fastjson-v0.1.0.jar](https://github.com/andrestubbe/FastJSON/releases/download/v0.1.0/fastjson-v0.1.0.jar)** (
+1. ?? **[fastjson-v0.1.0.jar](https://github.com/andrestubbe/FastJSON/releases/download/v0.1.0/fastjson-v0.1.0.jar)** (
    The Core Library)
-2. ⚙️ **[fastcore-v0.1.0.jar](https://github.com/andrestubbe/FastCore/releases/download/v0.1.0/fastcore-v0.1.0.jar)** (
+2. ?? **[fastcore-v0.1.0.jar](https://github.com/andrestubbe/FastCore/releases/download/v0.1.0/fastcore-v0.1.0.jar)** (
    The Mandatory Native Loader)
 
 ---
@@ -106,7 +106,7 @@ Download the latest JARs directly to add them to your classpath:
 
 * **[COMPILE.md](docs/COMPILE.md)**: Full compilation guide (MSVC C++17 build chain + JNI Setup).
 * **[REFERENCE.md](docs/REFERENCE.md)**: Full API descriptions, border configurations, and codepoint index.
-* **[PHILOSOPHIE.md](docs/PHILOSOPHIE.md)**: The engineering rationale for zero-allocation performance.
+* **[PHILOSOPHY.md](docs/PHILOSOPHY.md)**: The engineering rationale for zero-allocation performance.
 * **[ROADMAP.md](docs/ROADMAP.md)**: Future milestones and planned features.
 
 ---
@@ -115,26 +115,26 @@ Download the latest JARs directly to add them to your classpath:
 
 | Platform      | Status            |
 |---------------|-------------------|
-| Windows 10/11 | ✅ Fully Supported |
-| Linux         | 🚧 Planned        |
-| macOS         | 🚧 Planned        |
+| Windows 10/11 | ? Fully Supported |
+| Linux         | ?? Planned        |
+| macOS         | ?? Planned        |
 
 ---
 
 ## License
 
-MIT License — See [LICENSE](LICENSE) file for details.
+MIT License � See [LICENSE](LICENSE) file for details.
 
 ---
 
 ## Related Projects
 
-- [FastCore](https://github.com/andrestubbe/FastCore) — Native Library Loader for Java
-- [FastKeyboard](https://github.com/andrestubbe/FastKeyboard) — High-performance RawInput engine
-- [FastTheme](https://github.com/andrestubbe/FastTheme) — Advanced UI styling engine
+- [FastCore](https://github.com/andrestubbe/FastCore) � Native Library Loader for Java
+- [FastKeyboard](https://github.com/andrestubbe/FastKeyboard) � High-performance RawInput engine
+- [FastTheme](https://github.com/andrestubbe/FastTheme) � Advanced UI styling engine
 
 ---
-**Part of the FastJava Ecosystem** — *Making the JVM faster. Small package. Maximum speed. Zero bloat. 🚀📋*
+**Part of the FastJava Ecosystem** � *Making the JVM faster. Small package. Maximum speed. Zero bloat. ????*
 
 
 
