@@ -1,6 +1,6 @@
-﻿@echo off
-echo ðŸš€ Running Hero Demo...
+@echo off
+echo [FastJSON] Running Demo (via JitPack)...
 cd examples\00-basic-usage
-call mvn -q compile exec:java -Dexec.mainClass=Example
+call mvn compile exec:java -Dexec.mainClass=Example
 cd ..\..
 pause
