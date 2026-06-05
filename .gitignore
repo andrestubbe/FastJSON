@@ -1,7 +1,8 @@
-# Build outputs
+﻿# Build outputs
 target/
 build/
 *.dll
+!src/main/resources/native/*.dll
 *.so
 *.dylib
 *.obj
@@ -50,6 +51,7 @@ replay_pid*
 *.dylib
 *.so
 *.dll
+!src/main/resources/native/*.dll
 
 # OS
 .DS_Store
