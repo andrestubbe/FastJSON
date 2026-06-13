@@ -276,9 +276,13 @@ JNIEXPORT jlong JNICALL Java_fastjson_FastJSON_nativeParse(
     jbyte* bytes = env->GetByteArrayElements(data, nullptr);
     if (!bytes) return 0;
     
-    // Create parser state
+    // Allocate native copy to prevent dangling pointer issues after JNI release
+    uint8_t* nativeCopy = new uint8_t[length];
+    std::memcpy(nativeCopy, reinterpret_cast<const uint8_t*>(bytes) + offset, length);
+    
+    // Create parser state using native copy
     ParserState state;
-    state.data = reinterpret_cast<const uint8_t*>(bytes) + offset;
+    state.data = nativeCopy;
     state.length = static_cast<size_t>(length);
     state.pos = 0;
     state.line = 1;
@@ -290,6 +294,13 @@ JNIEXPORT jlong JNICALL Java_fastjson_FastJSON_nativeParse(
     
     env->ReleaseByteArrayElements(data, bytes, JNI_ABORT);
     
+    if (result) {
+        result->sourceData = nativeCopy;
+        result->ownsSourceData = true;
+    } else {
+        delete[] nativeCopy;
+    }
+    
     return reinterpret_cast<jlong>(result);
 }
 
@@ -300,8 +311,12 @@ JNIEXPORT jlong JNICALL Java_fastjson_FastJSON_nativeParseBuffer(
     void* address = env->GetDirectBufferAddress(buffer);
     if (!address) return 0;
     
+    // Allocate native copy to prevent dangling pointer issues
+    uint8_t* nativeCopy = new uint8_t[length];
+    std::memcpy(nativeCopy, static_cast<const uint8_t*>(address) + offset, length);
+    
     ParserState state;
-    state.data = static_cast<const uint8_t*>(address) + offset;
+    state.data = nativeCopy;
     state.length = static_cast<size_t>(length);
     state.pos = 0;
     state.line = 1;
@@ -309,6 +324,13 @@ JNIEXPORT jlong JNICALL Java_fastjson_FastJSON_nativeParseBuffer(
     state.flags = FJ_PARSE_LAZY;
     
     ValueHandle* result = parseJson(state);
+    
+    if (result) {
+        result->sourceData = nativeCopy;
+        result->ownsSourceData = true;
+    } else {
+        delete[] nativeCopy;
+    }
     
     return reinterpret_cast<jlong>(result);
 }
@@ -564,11 +586,16 @@ ValueHandle* createValue(int type) {
     value->sourceData = nullptr;
     value->sourceOffset = 0;
     value->sourceLength = 0;
+    value->ownsSourceData = false;
     return value;
 }
 
 void freeValue(ValueHandle* value) {
     if (!value) return;
+    
+    if (value->ownsSourceData && value->sourceData) {
+        delete[] const_cast<uint8_t*>(value->sourceData);
+    }
     
     switch (value->type) {
         case FJ_TYPE_ARRAY:

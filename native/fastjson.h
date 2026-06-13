@@ -261,6 +261,7 @@ struct ValueHandle {
     const uint8_t* sourceData;
     size_t sourceOffset;
     size_t sourceLength;
+    bool ownsSourceData;
 };
 
 /**

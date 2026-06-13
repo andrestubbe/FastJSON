@@ -98,9 +98,10 @@
 
     <build>
         <resources>
-            <!-- Include native DLL in JAR -->
+            <!-- Include native DLL in JAR under /native -->
             <resource>
                 <directory>build</directory>
+                <targetPath>native</targetPath>
                 <includes>
                     <include>*.dll</include>
                     <include>*.so</include>
@@ -209,24 +210,7 @@
                 </configuration>
             </plugin>
 
-            <!-- Native Library Resource Plugin -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>3.3.1</version>
-                <configuration>
-                    <resources>
-                        <resource>
-                            <directory>build</directory>
-                            <includes>
-                                <include>*.dll</include>
-                                <include>*.so</include>
-                                <include>*.dylib</include>
-                            </includes>
-                        </resource>
-                    </resources>
-                </configuration>
-            </plugin>
+
         </plugins>
     </build>
 

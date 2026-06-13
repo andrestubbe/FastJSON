@@ -6,7 +6,7 @@
 [![Platform](https://img.shields.io/badge/Platform-Windows%2010+-lightgrey.svg)]()
 [![JitPack](https://img.shields.io/badge/JitPack-ready-green.svg)](https://jitpack.io/#andrestubbe/FastJSON)
 
-**âš¡ A high-performance native JSON module for the FastJava ecosystem. Optimized for raw throughput and zero-copy parsing
+**💡 A high-performance native JSON module for the FastJava ecosystem. Optimized for raw throughput and zero-copy parsing
 via SIMD.**
 
 FastJSON delivers elite parsing performance by leveraging native SIMD instructions and optimized memory handling. Built
@@ -95,9 +95,9 @@ dependencies {
 
 Download the latest JARs directly to add them to your classpath:
 
-1. ðŸš€ **[fastjson-0.1.0.jar](https://github.com/andrestubbe/FastJSON/releases/download/0.1.0/fastjson-0.1.0.jar)** (
+1. 🚀 **[fastjson-0.1.0.jar](https://github.com/andrestubbe/FastJSON/releases/download/0.1.0/fastjson-0.1.0.jar)** (
    The Core Library)
-2. ðŸš€ **[fastcore-0.1.0.jar](https://github.com/andrestubbe/FastCore/releases/download/0.1.0/fastcore-0.1.0.jar)** (
+2. ⚙️ **[fastcore-0.1.0.jar](https://github.com/andrestubbe/FastCore/releases/download/0.1.0/fastcore-0.1.0.jar)** (
    The Mandatory Native Loader)
 
 ---
@@ -134,7 +134,7 @@ MIT License  See [LICENSE](LICENSE) file for details.
 - [FastTheme](https://github.com/andrestubbe/FastTheme)  Advanced UI styling engine
 
 ---
-**Part of the FastJava Ecosystem**  *Making the JVM faster. Small package. Maximum speed. Zero bloat. ðŸš€ðŸš€*
+**Part of the FastJava Ecosystem** — *Making the JVM faster. Small package. Maximum speed. Zero bloat. 🚀📋*
 
 
 
