@@ -429,7 +429,32 @@ public class FastJsonValue implements AutoCloseable {
      * @return string value
      */
     public String asString() {
-        return FastJSON.nativeGetStringValue(handle);
+        String raw = FastJSON.nativeGetStringValue(handle);
+        if (raw == null) return null;
+        if (raw.indexOf('\\') < 0) return raw;
+        
+        StringBuilder sb = new StringBuilder();
+        int len = raw.length();
+        for (int i = 0; i < len; i++) {
+            char c = raw.charAt(i);
+            if (c == '\\' && i + 1 < len) {
+                char next = raw.charAt(i + 1);
+                switch (next) {
+                    case '"': sb.append('"'); i++; break;
+                    case '\\': sb.append('\\'); i++; break;
+                    case '/': sb.append('/'); i++; break;
+                    case 'b': sb.append('\b'); i++; break;
+                    case 'f': sb.append('\f'); i++; break;
+                    case 'n': sb.append('\n'); i++; break;
+                    case 'r': sb.append('\r'); i++; break;
+                    case 't': sb.append('\t'); i++; break;
+                    default: sb.append(c); break;
+                }
+            } else {
+                sb.append(c);
+            }
+        }
+        return sb.toString();
     }
     
     /**
