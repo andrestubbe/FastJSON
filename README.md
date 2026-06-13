@@ -65,17 +65,35 @@ Add the JitPack repository and the dependencies to your `pom.xml`:
         <url>https://jitpack.io</url>
     </repository>
 </repositories>
+
 <dependencies>
-   <dependency>
-       <groupId>com.github.andrestubbe</groupId>
-       <artifactId>fastjson</artifactId>
-       <version>0.1.0</version>
-   </dependency>
-   <dependency>
-       <groupId>com.github.andrestubbe</groupId>
-       <artifactId>fastcore</artifactId>
-       <version>0.1.0</version>
-   </dependency>
+<!-- FastJSON Library -->
+<dependency>
+    <groupId>com.github.andrestubbe</groupId>
+    <artifactId>FastJSON</artifactId>
+    <version>0.1.0</version>
+</dependency>
+
+<!-- FastCore (Required Native Loader) -->
+<dependency>
+    <groupId>com.github.andrestubbe</groupId>
+    <artifactId>fastcore</artifactId>
+    <version>0.1.0</version>
+</dependency>
+
+<!-- FastString (Required Dependency) -->
+<dependency>
+    <groupId>com.github.andrestubbe</groupId>
+    <artifactId>FastString</artifactId>
+    <version>0.1.0</version>
+</dependency>
+
+<!-- FastBytes (Required Dependency) -->
+<dependency>
+    <groupId>com.github.andrestubbe</groupId>
+    <artifactId>FastBytes</artifactId>
+    <version>0.1.0</version>
+</dependency>
 </dependencies>
 ```
 
@@ -85,9 +103,12 @@ Add the JitPack repository and the dependencies to your `pom.xml`:
 repositories {
     maven { url 'https://jitpack.io' }
 }
+
 dependencies {
-    implementation 'com.github.andrestubbe:fastjson:0.1.0'
+    implementation 'com.github.andrestubbe:FastJSON:0.1.0'
     implementation 'com.github.andrestubbe:fastcore:0.1.0'
+    implementation 'com.github.andrestubbe:FastString:0.1.0'
+    implementation 'com.github.andrestubbe:FastBytes:0.1.0'
 }
 ```
 
@@ -95,10 +116,13 @@ dependencies {
 
 Download the latest JARs directly to add them to your classpath:
 
-1. 🚀 **[fastjson-0.1.0.jar](https://github.com/andrestubbe/FastJSON/releases/download/0.1.0/fastjson-0.1.0.jar)** (
-   The Core Library)
-2. ⚙️ **[fastcore-0.1.0.jar](https://github.com/andrestubbe/FastCore/releases/download/0.1.0/fastcore-0.1.0.jar)** (
-   The Mandatory Native Loader)
+1. 🚀 **[fastjson-0.1.0.jar](https://github.com/andrestubbe/FastJSON/releases/download/0.1.0/fastjson-0.1.0.jar)** (Core Library)
+2. ⚙️ **[fastcore-0.1.0.jar](https://github.com/andrestubbe/FastCore/releases/download/0.1.0/fastcore-0.1.0.jar)** (Mandatory Native Loader)
+3. 📦 **[FastString-0.1.0.jar](https://github.com/andrestubbe/FastString/releases/download/0.1.0/FastString-0.1.0.jar)** (Required String Dependency)
+4. 📦 **[FastBytes-0.1.0.jar](https://github.com/andrestubbe/FastBytes/releases/download/0.1.0/FastBytes-0.1.0.jar)** (Required Bytes Dependency)
+
+> [!IMPORTANT]
+> All JARs must be in your classpath for the JNI calls to function correctly.
 
 ---
 
