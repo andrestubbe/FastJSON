@@ -45,10 +45,10 @@ public class Demo {
 
 ## Features
 
-- **? SIMD Accelerated**: Native JSON parsing optimizations (AVX2/SSE).
-- **ðŸš€ Zero-Copy**: Direct access to native byte buffers bypassing String overhead.
-- **ðŸš€ Raw Performance**: Optimized for massive data throughput (50x faster than Jackson).
-- **ðŸš€? Ecosystem Ready**: Seamless integration with FastIO and FastCore.
+- ⚡ **SIMD Accelerated**: Native JSON parsing via AVX2/SSE — no JVM overhead.
+- 🚀 **Zero-Copy**: Direct access to native byte buffers, bypassing String allocation.
+- 📈 **Raw Performance**: Optimized for massive data throughput (up to 50× faster than Jackson).
+- 🔗 **Ecosystem Ready**: Seamless integration with FastIO, FastBytes, FastString and FastCore.
 
 ---
 
@@ -153,12 +153,13 @@ MIT License  See [LICENSE](LICENSE) file for details.
 
 ## Related Projects
 
-- [FastCore](https://github.com/andrestubbe/FastCore)  Native Library Loader for Java
-- [FastJSON](https://github.com/andrestubbe/FastJSON)  High-performance RawInput engine
-- [FastTheme](https://github.com/andrestubbe/FastTheme)  Advanced UI styling engine
+- [FastCore](https://github.com/andrestubbe/FastCore) — Native Library Loader for Java
+- [FastIO](https://github.com/andrestubbe/FastIO) — Ultra-fast native file I/O for Java
+- [FastBytes](https://github.com/andrestubbe/FastBytes) — High-performance byte buffer engine
+- [FastString](https://github.com/andrestubbe/FastString) — Zero-allocation String processing
 
 ---
-**Part of the FastJava Ecosystem** — *Making the JVM faster. Small package. Maximum speed. Zero bloat. 🚀📋*
+**Part of the FastJava Ecosystem** — *Making the JVM faster. Small package. Maximum speed. Zero bloat. ⚡*
 
 
 
