@@ -74,7 +74,7 @@ public class FastJSON {
         if (handle == 0) {
             throw new FastJsonParseException("Failed to parse JSON");
         }
-        return new FastJsonValue(handle, data, offset, length);
+        return new FastJsonValue(handle, data, offset, length, true);
     }
     
     /**
@@ -126,7 +126,7 @@ public class FastJSON {
             if (handle == 0) {
                 throw new FastJsonParseException("Failed to parse JSON from buffer");
             }
-            return new FastJsonValue(handle, null, 0, buffer.remaining());
+            return new FastJsonValue(handle, null, 0, buffer.remaining(), true);
         } else {
             // Heap buffer - copy to array
             byte[] data = new byte[buffer.remaining()];

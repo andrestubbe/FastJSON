@@ -30,13 +30,15 @@ public class FastJsonValue implements AutoCloseable {
     private final byte[] sourceData;
     private final int sourceOffset;
     private final int sourceLength;
+    private final boolean ownsMemory;
     private volatile boolean closed = false;
     
-    FastJsonValue(long handle, byte[] sourceData, int sourceOffset, int sourceLength) {
+    FastJsonValue(long handle, byte[] sourceData, int sourceOffset, int sourceLength, boolean ownsMemory) {
         this.handle = handle;
         this.sourceData = sourceData;
         this.sourceOffset = sourceOffset;
         this.sourceLength = sourceLength;
+        this.ownsMemory = ownsMemory;
     }
     
     long getHandle() {
@@ -137,7 +139,7 @@ public class FastJsonValue implements AutoCloseable {
             throw new IllegalStateException("Not an object: " + getTypeName());
         }
         long fieldHandle = FastJSON.nativeGetField(handle, name);
-        return fieldHandle != 0 ? new FastJsonValue(fieldHandle, sourceData, sourceOffset, sourceLength) : null;
+        return fieldHandle != 0 ? new FastJsonValue(fieldHandle, sourceData, sourceOffset, sourceLength, false) : null;
     }
     
     /**
@@ -234,7 +236,7 @@ public class FastJsonValue implements AutoCloseable {
         if (elementHandle == 0) {
             throw new IndexOutOfBoundsException("Index: " + index);
         }
-        return new FastJsonValue(elementHandle, sourceData, sourceOffset, sourceLength);
+        return new FastJsonValue(elementHandle, sourceData, sourceOffset, sourceLength, false);
     }
     
     /**
@@ -567,7 +569,9 @@ public class FastJsonValue implements AutoCloseable {
     public void close() {
         if (!closed) {
             closed = true;
-            FastJSON.nativeFreeValue(handle);
+            if (ownsMemory) {
+                FastJSON.nativeFreeValue(handle);
+            }
         }
     }
     
