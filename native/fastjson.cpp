@@ -259,14 +259,7 @@ int findStringEndScalar(const uint8_t* data, size_t length) {
 // JNI IMPLEMENTATIONS
 // ============================================================================
 
-namespace fastjson {
-    // Object field structure
-    struct Field {
-        const uint8_t* keyData;      // Key string in source buffer
-        size_t keyLength;            // Key length
-        ValueHandle* value;        // Value handle
-    };
-}
+// Note: Field struct is defined in fastjson.h before ValueHandle.
 
 using namespace fastjson;
 
@@ -338,10 +331,14 @@ JNIEXPORT jlong JNICALL Java_fastjson_FastJSON_nativeParseBuffer(
 JNIEXPORT void JNICALL Java_fastjson_FastJSON_nativeFree(
     JNIEnv* env, jclass clazz, jlong handle) {
     
-    if (handle != 0) {
-        ValueHandle* value = reinterpret_cast<ValueHandle*>(handle);
-        freeValue(value);
-    }
+    // Sanity check: any real heap pointer on 64-bit Windows/Linux is
+    // well above 64KB (the first 64KB of address space is always unmapped).
+    // If the handle is suspiciously small, it is a corrupted value - skip it
+    // to avoid a guaranteed EXCEPTION_ACCESS_VIOLATION.
+    if (handle == 0 || handle < 0x10000LL) return;
+    
+    ValueHandle* value = reinterpret_cast<ValueHandle*>(handle);
+    freeValue(value);
 }
 
 JNIEXPORT jint JNICALL Java_fastjson_FastJSON_nativeGetType(
@@ -581,38 +578,47 @@ JNIEXPORT jint JNICALL Java_fastjson_FastJSON_nativeSkipWhitespace(
 namespace fastjson {
 
 ValueHandle* createValue(int type) {
+    // ValueHandle() constructor now zero-initialises all fields.
     ValueHandle* value = new ValueHandle();
     value->type = type;
-    value->sourceData = nullptr;
-    value->sourceOffset = 0;
-    value->sourceLength = 0;
-    value->ownsSourceData = false;
     return value;
 }
 
+// Minimum address sanity constant (same as in nativeFree).
+static const uintptr_t MIN_HEAP_ADDR = 0x10000;
+
 void freeValue(ValueHandle* value) {
     if (!value) return;
+    if (reinterpret_cast<uintptr_t>(value) < MIN_HEAP_ADDR) return;
     
-    if (value->ownsSourceData && value->sourceData) {
-        delete[] const_cast<uint8_t*>(value->sourceData);
-    }
-    
+    // FREE CHILDREN FIRST before releasing the source buffer they point into.
     switch (value->type) {
         case FJ_TYPE_ARRAY:
-            for (size_t i = 0; i < value->data.array.count; i++) {
-                freeValue(value->data.array.elements[i]);
+            if (value->data.array.elements) {
+                for (size_t i = 0; i < value->data.array.count; i++) {
+                    freeValue(value->data.array.elements[i]);
+                }
+                delete[] value->data.array.elements;
+                value->data.array.elements = nullptr;
             }
-            delete[] value->data.array.elements;
             break;
             
         case FJ_TYPE_OBJECT:
             if (value->data.object.fields) {
                 for (size_t i = 0; i < value->data.object.count; i++) {
                     freeValue(value->data.object.fields[i].value);
+                    value->data.object.fields[i].value = nullptr;
                 }
                 delete[] value->data.object.fields;
+                value->data.object.fields = nullptr;
             }
             break;
+    }
+    
+    // NOW free the source buffer (after all children that pointed into it are gone).
+    if (value->ownsSourceData && value->sourceData) {
+        delete[] const_cast<uint8_t*>(value->sourceData);
+        value->sourceData = nullptr;
     }
     
     delete value;

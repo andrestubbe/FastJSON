@@ -233,13 +233,24 @@ int findStringEndScalar(const uint8_t* data, size_t length);
  *  @{ */
 
 /**
+ * @brief Key-value field in a JSON object.
+ * @details keyData points into the nativeCopy buffer (NOT null-terminated).
+ *          value is a heap-allocated ValueHandle owned by the parent object.
+ */
+struct Field {
+    const uint8_t* keyData;   /**< Pointer into source buffer (not null-terminated) */
+    size_t         keyLength; /**< Length of key in bytes */
+    struct ValueHandle* value; /**< Owned child value */
+};
+
+/**
  * @brief JSON value handle
  * @details Union-based value storage with type discriminator.
  *          Supports lazy parsing via source reference.
  */
 struct ValueHandle {
     int type;
-    union {
+    union Data {
         int64_t intValue;
         double doubleValue;
         bool boolValue;
@@ -252,9 +263,11 @@ struct ValueHandle {
             size_t count;
         } array;
         struct {
-            struct Field* fields;
+            Field* fields;   /**< Now a COMPLETE type - no ABI mismatch */
             size_t count;
         } object;
+        // Explicit default constructor to zero-initialize the union
+        Data() : intValue(0) {}
     } data;
     
     // Source reference for lazy parsing
@@ -262,6 +275,16 @@ struct ValueHandle {
     size_t sourceOffset;
     size_t sourceLength;
     bool ownsSourceData;
+
+    // Zero-initialize everything on construction
+    ValueHandle()
+        : type(0)
+        , data()
+        , sourceData(nullptr)
+        , sourceOffset(0)
+        , sourceLength(0)
+        , ownsSourceData(false)
+    {}
 };
 
 /**

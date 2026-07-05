@@ -4,6 +4,7 @@ import faststring.FastString;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Represents a JSON value in the FastJSON parse tree.
@@ -26,12 +27,15 @@ public class FastJsonValue implements AutoCloseable {
     public static final int TYPE_NUMBER_DOUBLE = 6;
     public static final int TYPE_BOOLEAN = 7;
     
-    private final long handle;
+    private long handle;
     private final byte[] sourceData;
     private final int sourceOffset;
     private final int sourceLength;
     private final boolean ownsMemory;
-    private volatile boolean closed = false;
+    private final AtomicBoolean closed = new AtomicBoolean(false);
+    
+    // DEBUG: Track where this object was allocated to find the leak
+    private final Throwable allocationTrace = new Throwable("FastJsonValue allocated here");
     
     FastJsonValue(long handle, byte[] sourceData, int sourceOffset, int sourceLength, boolean ownsMemory) {
         this.handle = handle;
@@ -47,7 +51,7 @@ public class FastJsonValue implements AutoCloseable {
     }
     
     private void checkClosed() {
-        if (closed) {
+        if (closed.get()) {
             throw new IllegalStateException("FastJsonValue has been closed");
         }
     }
@@ -567,10 +571,10 @@ public class FastJsonValue implements AutoCloseable {
      */
     @Override
     public void close() {
-        if (!closed) {
-            closed = true;
-            if (ownsMemory) {
+        if (closed.compareAndSet(false, true)) {
+            if (ownsMemory && handle != 0) {
                 FastJSON.nativeFreeValue(handle);
+                handle = 0;
             }
         }
     }
@@ -578,7 +582,17 @@ public class FastJsonValue implements AutoCloseable {
     @Override
     protected void finalize() throws Throwable {
         try {
-            if (!closed) {
+            if (!closed.get()) {
+                if (ownsMemory) {
+                    try {
+                        java.io.FileOutputStream fos = new java.io.FileOutputStream("C:\\Users\\andre\\fastjson_leak.log", true);
+                        java.io.PrintStream ps = new java.io.PrintStream(fos);
+                        ps.println("LEAK DETECTED! A FastJsonValue was garbage collected without being closed.");
+                        allocationTrace.printStackTrace(ps);
+                        ps.println("--------------------------------------------------");
+                        ps.close();
+                    } catch (Exception e) {}
+                }
                 close();
             }
         } finally {
