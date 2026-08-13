@@ -175,9 +175,9 @@ public class Example {
         System.out.println("========================================");
         System.out.println();
         System.out.println("Key takeaways:");
-        System.out.println("  • FastJSON.parse() - 50× faster than Jackson");
-        System.out.println("  • getFastString() - Zero-copy, no GC pressure");
-        System.out.println("  • Lazy parsing - Only parse what you access");
-        System.out.println("  • try-with-resources - Automatic cleanup");
+        System.out.println("  -> FastJSON.parse() - 50x faster than Jackson");
+        System.out.println("  -> getFastString() - Zero-copy, no GC pressure");
+        System.out.println("  -> Lazy parsing - Only parse what you access");
+        System.out.println("  -> try-with-resources - Automatic cleanup");
     }
 }

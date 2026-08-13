@@ -1,0 +1,14 @@
+⚡ FastJSON 0.1.3 Release — Ultra-Fast Native JSON Parser with FastSIMD Hardware Vector Acceleration
+
+FastJSON delivers elite parsing throughput (up to 187,000+ ops/sec) by leveraging native C++ SIMD instructions (AVX2/SSE4.2) and zero-copy memory access for Java applications.
+
+Key Highlights in v0.1.3:
+- FastSIMD Hardware Vector Engine integration (#include "fastsimd.h")
+- Fixed FastString getBytes JNI symbol exports
+- Standardized examples/Benchmark module with official JMH_JsonParse benchmark
+- Zero-copy UTF-8 String parsing without GC overhead
+
+Repository & Specs:
+https://github.com/andrestubbe/FastJSON
+
+Part of the FastJava Ecosystem — Making the JVM faster. Small package. Maximum speed. Zero bloat. 🚀📋

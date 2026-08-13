@@ -1,4 +1,5 @@
 #include "fastjson.h"
+#include "fastsimd.h"
 #include <cstring>
 #include <cstdlib>
 #include <cstdio>
