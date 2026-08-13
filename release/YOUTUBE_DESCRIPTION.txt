@@ -4,6 +4,9 @@ FastJSON: High-Performance SIMD Native JSON Parser for Java 🚀
 DESCRIPTION:
 Demonstrating FastJSON, the zero-copy, SIMD-accelerated JSON parser for Java. Powered by the unified FastSIMD hardware vector engine, FastJSON parses JSON tokens, scans quotes/delimiters, and performs lazy field extraction at up to 187,000+ operations per second.
 
+DEMO VIDEO:
+https://youtu.be/vRKo-_eOOrw
+
 TECHNICAL HIGHLIGHTS:
 - FastSIMD Hardware Vector Engine: Integrated native C++ SIMD header (#include "fastsimd.h") for 32-byte parallel quote scanning and delimiter matching.
 - Zero-Copy UTF-8 String Operations: Direct memory access on raw byte buffers using FastString foundation to eliminate GC allocation pressure.

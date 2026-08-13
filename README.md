@@ -12,7 +12,7 @@ via SIMD.**
 FastJSON delivers elite parsing performance by leveraging native SIMD instructions and optimized memory handling. Built
 for high-frequency API requests and massive data processing pipelines.
 
-[![FastKeyboard Showcase](docs/screenshot.png)](https://www.youtube.com/watch?v=BZsqQl7WqWk)
+[![FastJSON SIMD Performance Showcase](docs/screenshot.png)](https://youtu.be/vRKo-_eOOrw)
 
 
 ---
