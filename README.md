@@ -93,7 +93,7 @@ Add the JitPack repository and the dependencies to your `pom.xml`:
 </repositories>
 
 <dependencies>
-    <!-- FastJSON Library -->
+    <!-- FastJSON Engine -->
     <dependency>
         <groupId>com.github.andrestubbe</groupId>
         <artifactId>FastJSON</artifactId>
@@ -121,6 +121,20 @@ Add the JitPack repository and the dependencies to your `pom.xml`:
         <version>0.1.1</version>
     </dependency>
 
+    <!-- FastMemory Aligned Allocator -->
+    <dependency>
+        <groupId>com.github.andrestubbe</groupId>
+        <artifactId>FastMemory</artifactId>
+        <version>0.1.1</version>
+    </dependency>
+
+    <!-- FastPointer Primitive Address Wrapper -->
+    <dependency>
+        <groupId>com.github.andrestubbe</groupId>
+        <artifactId>FastPointer</artifactId>
+        <version>0.1.1</version>
+    </dependency>
+
     <!-- FastCore Native Loader -->
     <dependency>
         <groupId>com.github.andrestubbe</groupId>
@@ -142,6 +156,8 @@ dependencies {
     implementation 'com.github.andrestubbe:FastSIMD:0.1.0'
     implementation 'com.github.andrestubbe:FastString:0.1.0'
     implementation 'com.github.andrestubbe:FastBytes:0.1.1'
+    implementation 'com.github.andrestubbe:FastMemory:0.1.1'
+    implementation 'com.github.andrestubbe:FastPointer:0.1.1'
     implementation 'com.github.andrestubbe:FastCore:0.1.0'
 }
 ```
@@ -154,7 +170,9 @@ Download the latest JARs directly to add them to your classpath:
 2. ⚡ **[FastSIMD-0.1.0.jar](https://github.com/andrestubbe/FastSIMD/releases/download/0.1.0/FastSIMD-0.1.0.jar)** (Hardware Vector Engine)
 3. 📦 **[FastString-0.1.0.jar](https://github.com/andrestubbe/FastString/releases/download/0.1.0/FastString-0.1.0.jar)** (String Foundation)
 4. 📦 **[FastBytes-0.1.1.jar](https://github.com/andrestubbe/FastBytes/releases/download/0.1.1/FastBytes-0.1.1.jar)** (Byte Engine)
-5. ⚙️ **[fastcore-0.1.0.jar](https://github.com/andrestubbe/FastCore/releases/download/0.1.0/fastcore-0.1.0.jar)** (Mandatory Native Loader)
+5. 💾 **[FastMemory-0.1.1.jar](https://github.com/andrestubbe/FastMemory/releases/download/0.1.1/FastMemory-0.1.1.jar)** (32-Byte Aligned Allocator)
+6. 📍 **[FastPointer-0.1.1.jar](https://github.com/andrestubbe/FastPointer/releases/download/0.1.1/FastPointer-0.1.1.jar)** (Native Primitive Pointer)
+7. ⚙️ **[fastcore-0.1.0.jar](https://github.com/andrestubbe/FastCore/releases/download/0.1.0/fastcore-0.1.0.jar)** (Mandatory Native Loader)
 
 > [!IMPORTANT]
 > All JARs must be in your classpath for the JNI calls to function correctly.
