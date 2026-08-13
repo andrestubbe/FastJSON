@@ -17,29 +17,55 @@ for high-frequency API requests and massive data processing pipelines.
 
 ---
 
-## Table of Contents
-
-- [Features](#features)
-- [Performance](#performance)
-- [Installation](#installation)
-- [License](#license)
-- [Related Projects](#related-projects)
-
----
-
-## Quick Start
+## Quick Start — Example
 
 ```java
 import fastjson.FastJSON;
 import fastjson.FastJsonValue;
+import java.nio.charset.StandardCharsets;
 
 public class Demo {
     public static void main(String[] args) {
-        FastJsonValue doc = FastJSON.parse("{\"status\":\"ok\", \"latency\": 120}");
-        System.out.println("Status: " + doc.getString("status"));
+        // 1. Raw UTF-8 Bytes (Zero-Copy Parsing)
+        byte[] rawJson = ("{"
+            + "\"status\":\"success\","
+            + "\"model\":\"FastAI-v2\","
+            + "\"tokens\":128,"
+            + "\"payload\":{\"confidence\":0.994,\"tags\":[\"simd\",\"native\",\"fast\"]}"
+            + "}").getBytes(StandardCharsets.UTF_8);
+
+        // 2. High-Speed SIMD Parse Root Node
+        FastJsonValue json = FastJSON.parse(rawJson);
+
+        // 3. Direct Field Extraction & Nested Objects
+        String status = json.getString("status");
+        int tokens = json.getInt("tokens");
+        double confidence = json.getObject("payload").getDouble("confidence");
+
+        System.out.println("Status:     " + status);
+        System.out.println("Tokens:     " + tokens);
+        System.out.println("Confidence: " + confidence);
+
+        // 4. Clean Memory Release
+        json.free();
     }
 }
 ```
+
+---
+
+## Table of Contents
+
+- [Quick Start — Example](#quick-start--example)
+- [Features](#features)
+- [Performance](#performance)
+- [API Quick Reference](#api-quick-reference)
+- [Installation](#installation)
+- [Technical Examples & Benchmarks](#technical-examples--benchmarks)
+- [Documentation](#documentation)
+- [Platform Support](#platform-support)
+- [Related Projects](#related-projects)
+- [License](#license)
 
 ---
 
