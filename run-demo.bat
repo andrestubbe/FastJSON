@@ -8,3 +8,4 @@ echo 🚀 Launching FastJSON Demo...
 cd examples\00-basic-usage
 call mvn compile exec:java -Dexec.mainClass=Example -q
 cd ..\..
+pause

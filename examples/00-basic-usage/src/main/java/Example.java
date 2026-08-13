@@ -51,7 +51,7 @@ public class Example {
         
         FastString fastName = person.getFastString("name");
         System.out.println("FastString (zero-copy): " + fastName);
-        System.out.println("Bytes length: " + fastName.getBytes().length);
+        System.out.println("Bytes length: " + fastName.byteLength());
         System.out.println("(No String allocation - references original buffer)");
         System.out.println();
         

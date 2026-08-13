@@ -348,29 +348,29 @@ public class FastJsonBuilder {
     }
     
     private void buildObject(FastString out) {
-        out.append('{');
+        out.append("{");
         
         for (int i = 0; i < fields.size(); i++) {
-            if (i > 0) out.append(',');
+            if (i > 0) out.append(",");
             
             Field field = fields.get(i);
             appendString(out, field.name);
-            out.append(':');
+            out.append(":");
             appendValue(out, field.value);
         }
         
-        out.append('}');
+        out.append("}");
     }
     
     private void buildArray(FastString out) {
-        out.append('[');
+        out.append("[");
         
         for (int i = 0; i < elements.size(); i++) {
-            if (i > 0) out.append(',');
+            if (i > 0) out.append(",");
             appendValue(out, elements.get(i));
         }
         
-        out.append(']');
+        out.append("]");
     }
     
     private void appendValue(FastString out, Value value) {
@@ -406,7 +406,7 @@ public class FastJsonBuilder {
     }
     
     private void appendString(FastString out, String s) {
-        out.append('"');
+        out.append("\"");
         
         // Escape special characters
         for (int i = 0; i < s.length(); i++) {
@@ -423,16 +423,16 @@ public class FastJsonBuilder {
                     if (c < 0x20) {
                         out.append(String.format("\\u%04x", (int) c));
                     } else {
-                        out.append(c);
+                        out.append(String.valueOf(c));
                     }
             }
         }
         
-        out.append('"');
+        out.append("\"");
     }
     
     private void appendFastString(FastString out, FastString fs) {
-        out.append('"');
+        out.append("\"");
         
         byte[] bytes = fs.getBytes();
         int offset = 0;
@@ -455,16 +455,16 @@ public class FastJsonBuilder {
                         if (c < 0x20) {
                             out.append(String.format("\\u%04x", (int) c));
                         } else {
-                            out.append(c);
+                            out.append(String.valueOf(c));
                         }
                 }
             } else {
                 // UTF-8 continuation byte - append as-is
-                out.append((char) (b & 0xFF));
+                out.append(String.valueOf((char) (b & 0xFF)));
             }
         }
         
-        out.append('"');
+        out.append("\"");
     }
     
     private void checkObjectMode() {
