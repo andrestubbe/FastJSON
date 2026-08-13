@@ -1,9 +1,11 @@
 # Changelog
 
-All notable changes to this project will be documented in this file.
+All notable changes to FastJSON will be documented in this file.
 
-## [0.1.0] - 2026-05-23
+## [0.1.1] - 2026-06-29
 
-### Added
-- Initial release
-- Standardized FastJava ecosystem module
+### Fixed
+- **CRITICAL**: Fixed a major bug where `FastJsonValue` would cause a double-free `EXCEPTION_ACCESS_VIOLATION` crash when sub-nodes were garbage collected. Sub-nodes extracted via `.path()` or `.get()` no longer incorrectly attempt to free the native JSON tree memory.
+
+## [0.1.0] - Initial Release
+- Initial implementation of the zero-copy FastJSON parser.
