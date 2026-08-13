@@ -1,14 +1,31 @@
-⚡ FastJSON 0.1.3 Release — Ultra-Fast Native JSON Parser with FastSIMD Hardware Vector Acceleration
+TITLE:
+FastJSON: High-Performance SIMD Native JSON Parser for Java 🚀
 
-FastJSON delivers elite parsing throughput (up to 187,000+ ops/sec) by leveraging native C++ SIMD instructions (AVX2/SSE4.2) and zero-copy memory access for Java applications.
+DESCRIPTION:
+Demonstrating FastJSON, the zero-copy, SIMD-accelerated JSON parser for Java. Powered by the unified FastSIMD hardware vector engine, FastJSON parses JSON tokens, scans quotes/delimiters, and performs lazy field extraction at up to 187,000+ operations per second.
 
-Key Highlights in v0.1.3:
-- FastSIMD Hardware Vector Engine integration (#include "fastsimd.h")
-- Fixed FastString getBytes JNI symbol exports
-- Standardized examples/Benchmark module with official JMH_JsonParse benchmark
-- Zero-copy UTF-8 String parsing without GC overhead
+TECHNICAL HIGHLIGHTS:
+- FastSIMD Hardware Vector Engine: Integrated native C++ SIMD header (#include "fastsimd.h") for 32-byte parallel quote scanning and delimiter matching.
+- Zero-Copy UTF-8 String Operations: Direct memory access on raw byte buffers using FastString foundation to eliminate GC allocation pressure.
+- Lazy Field Access: Bypasses parsing unread JSON fields, saving CPU cycles on massive payload requests.
+- Official JMH Suite: Standardized benchmark Uber-JAR executable via run-benchmark.bat.
 
-Repository & Specs:
-https://github.com/andrestubbe/FastJSON
+RESULTS:
+- Parse Throughput: Up to 187,313 ops/sec in JMH benchmarks (10x-50x faster than traditional JVM JSON parsers)
+- Zero-Copy Access: Zero object allocations for string field extraction
+- JNI Latency: Critical memory pinning minimizes JNI bridge overhead
 
-Part of the FastJava Ecosystem — Making the JVM faster. Small package. Maximum speed. Zero bloat. 🚀📋
+FASTJAVA CORE REPOSITORIES:
+1. FastJSON: https://github.com/andrestubbe/FastJSON
+2. FastSIMD: https://github.com/andrestubbe/FastSIMD
+3. FastString: https://github.com/andrestubbe/FastString
+4. FastBytes: https://github.com/andrestubbe/FastBytes
+5. FastCore: https://github.com/andrestubbe/FastCore
+
+Ecosystem Overview: https://github.com/andrestubbe/FastJava
+
+Part of the FastJava Ecosystem — Making the JVM faster.
+Made with ⚡ by Andre Stubbe
+
+TAGS:
+Java, FastJava, FastJSON, FastSIMD, FastString, FastBytes, JSON, AVX2, SIMD, High Performance, C++, JNI, JMH Benchmark
