@@ -126,6 +126,21 @@ Download the latest JARs directly to add them to your classpath:
 
 ---
 
+## Technical Examples & Benchmarks
+
+See the `examples/` directory for interactive technical implementations and official JMH benchmarks:
+
+| Benchmark Case | Description | Java Example | JMH Benchmark |
+|---|---|---|---|
+| **JSON Parse Throughput** | SIMD token scanning vs Java JSON parsers | [Demo.java](run-demo.bat) | [JMH_JsonParse.java](examples/Benchmark/src/main/java/fastjson/benchmark/JMH_JsonParse.java) |
+
+### Run JMH Benchmarks via Script
+```cmd
+run-benchmark.bat
+```
+
+---
+
 ## Documentation
 
 * **[COMPILE.md](docs/COMPILE.md)**: Full compilation guide (MSVC C++17 build chain + JNI Setup).
