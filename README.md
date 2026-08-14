@@ -1,4 +1,4 @@
-# FastJSON 0.1.3 [ALPHA-2026-08-13] — Ultra-Fast Native JSON Parser for Java
+# FastJSON 0.1.3 [ALPHA-2026-08] — Ultra-Fast Native JSON Parser for Java
 
 [![Status](https://img.shields.io/badge/status-0.1.3-brightgreen.svg)](https://github.com/andrestubbe/FastJSON/releases/tag/0.1.3)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
