@@ -104,7 +104,7 @@ Add the JitPack repository and the dependencies to your `pom.xml`:
     <dependency>
         <groupId>com.github.andrestubbe</groupId>
         <artifactId>FastSIMD</artifactId>
-        <version>0.1.0</version>
+        <version>0.1.3</version>
     </dependency>
 
     <!-- FastString String Foundation -->
@@ -153,7 +153,7 @@ repositories {
 
 dependencies {
     implementation 'com.github.andrestubbe:FastJSON:0.1.3'
-    implementation 'com.github.andrestubbe:FastSIMD:0.1.0'
+    implementation 'com.github.andrestubbe:FastSIMD:0.1.3'
     implementation 'com.github.andrestubbe:FastString:0.1.0'
     implementation 'com.github.andrestubbe:FastBytes:0.1.1'
     implementation 'com.github.andrestubbe:FastMemory:0.1.1'
@@ -167,7 +167,7 @@ dependencies {
 Download the latest JARs directly to add them to your classpath:
 
 1. 🚀 **[FastJSON-0.1.3.jar](https://github.com/andrestubbe/FastJSON/releases/download/0.1.3/FastJSON-0.1.3.jar)** (Core Library)
-2. ⚡ **[FastSIMD-0.1.0.jar](https://github.com/andrestubbe/FastSIMD/releases/download/0.1.0/FastSIMD-0.1.0.jar)** (Hardware Vector Engine)
+2. ⚡ **[FastSIMD-0.1.3.jar](https://github.com/andrestubbe/FastSIMD/releases/download/0.1.3/FastSIMD-0.1.3.jar)** (Hardware Vector Engine)
 3. 📦 **[FastString-0.1.0.jar](https://github.com/andrestubbe/FastString/releases/download/0.1.0/FastString-0.1.0.jar)** (String Foundation)
 4. 📦 **[FastBytes-0.1.1.jar](https://github.com/andrestubbe/FastBytes/releases/download/0.1.1/FastBytes-0.1.1.jar)** (Byte Engine)
 5. 💾 **[FastMemory-0.1.1.jar](https://github.com/andrestubbe/FastMemory/releases/download/0.1.1/FastMemory-0.1.1.jar)** (32-Byte Aligned Allocator)
