@@ -56,6 +56,7 @@ public class Demo {
 
 ## Table of Contents
 
+- [Why FastJSON?](#why-fastjson)
 - [Quick Start — Example](#quick-start--example)
 - [Features](#features)
 - [Performance](#performance)
@@ -66,6 +67,28 @@ public class Demo {
 - [Platform Support](#platform-support)
 - [Related Projects](#related-projects)
 - [License](#license)
+
+---
+
+## Why FastJSON?
+
+Parsing large volumes of JSON in Java services, trading engines, and AI pipelines using traditional libraries like Jackson or Gson faces severe architectural constraints:
+
+- **Heavy Garbage Collection Pressure** — Conventional parsers allocate hundreds of thousands of intermediate `JsonNode`, `String`, and `HashMap` entry objects on the JVM heap for every payload.
+- **Mandatory String Conversions** — Libraries often require converting incoming network byte buffers into UTF-16 Java `String` objects before parsing can even begin.
+- **Scalar Character-by-Character Scanning** — Pure-Java parsers loop over input text byte-by-byte instead of processing 32-byte chunks concurrently in CPU vector registers.
+- **Reflection & Metadata Overhead** — Heavy databind reflection layers add CPU latency and cold-start warmup delays to microsecond request pipelines.
+
+FastJSON provides a native C++ parser engine (`fastjson.cpp`) driven by AVX2/SSE4.2 vector instructions and `FastMemory`. It parses raw UTF-8 byte streams directly off-heap with zero Java heap allocations during token scanning.
+
+| Feature | Google Gson | Jackson Databind | FastJSON |
+|:---|:---|:---|:---|
+| **Parsing Engine** | Pure Java reflection | Java character scanner | **Native AVX2 / SSE4.2 SIMD** |
+| **Input Format** | Java `String` / Reader | Java `String` / Stream | **Direct Zero-Copy `byte[]`** |
+| **Heap Allocations (Parse)**| High (Objects per token) | Moderate to High | **0 Heap Objects (Off-Heap DOM)** |
+| **Vectorization** | None (Scalar loop) | None (Scalar loop) | **32-Byte Chunk Vector Scanning** |
+| **Memory Management** | Pure JVM Garbage Collector| JVM Garbage Collector | **Explicit Native Handle (`free()`)** |
+| **Dependencies** | External JAR (~300 KB) | Multiple heavy JARs (>5 MB) | **Pure Java 17+ backed by FastCore** |
 
 ---
 
